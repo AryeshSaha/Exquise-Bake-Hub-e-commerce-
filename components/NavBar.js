@@ -5,7 +5,13 @@ import { RiAccountCircleFill } from "react-icons/ri";
 import CartContent from "./CartContent";
 import { useRouter } from "next/router";
 
-const NavBar = ({ cart, addToCart, reduceFromCart, clearCart, subTotalAmt }) => {
+const NavBar = ({
+  cart,
+  addToCart,
+  reduceFromCart,
+  clearCart,
+  subTotalAmt,
+}) => {
   const ref = useRef();
   const router = useRouter();
   const [isActive, setIsActive] = useState(router?.asPath);
@@ -40,6 +46,7 @@ const NavBar = ({ cart, addToCart, reduceFromCart, clearCart, subTotalAmt }) => 
             </svg>
             <span className="ml-3 text-xl">ExquiseBakeHub</span>
           </a>
+          {/* TODO: Active Link problem */}
           <nav className="md:ml-auto md:mr-auto flex flex-wrap items-center text-base justify-center space-x-5 md:space-x-10">
             <Link
               href={"/"}
@@ -78,13 +85,15 @@ const NavBar = ({ cart, addToCart, reduceFromCart, clearCart, subTotalAmt }) => 
               Contact
             </Link>
           </nav>
-          <div className="flex justify-between items-center w-full md:w-auto md:block md:space-x-5">
-            <button className="inline-flex items-cente border-0 py-1 px-3 focus:outline-none hover:bg-gray-300 rounded text-base mt-4 md:mt-0">
-              <RiAccountCircleFill size={25} />
-            </button>
+          <div className="flex justify-between items-center w-full md:w-auto md:block md:space-x-2">
+            <Link href={"/login"}>
+              <button className="inline-flex items-cente border-0 p-2 focus:outline-none hover:bg-gray-300 rounded-full text-base mt-4 md:mt-0">
+                <RiAccountCircleFill size={25} />
+              </button>
+            </Link>
             <button
               onClick={toggleCart}
-              className="inline-flex items-cente border-0 py-1 px-3 focus:outline-none hover:bg-gray-300 rounded text-base mt-4 md:mt-0"
+              className="inline-flex items-cente border-0 p-2 focus:outline-none hover:bg-gray-300 rounded-full text-base mt-4 md:mt-0"
             >
               <FaShoppingCart size={25} />
             </button>

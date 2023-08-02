@@ -1,5 +1,6 @@
 import CartContent from "@/components/CartContent";
 import React from "react";
+import { BsCurrencyRupee, BsFillBagCheckFill } from "react-icons/bs"
 
 const Checkout = ({ cart, subTotalAmt, addToCart, reduceFromCart }) => {
   return (
@@ -89,13 +90,16 @@ const Checkout = ({ cart, subTotalAmt, addToCart, reduceFromCart }) => {
           isCheckout={true}
         />
       </div>
+      <div className="flex justify-end mt-8">
+        <button className="flex justify-center items-center text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg">
+          <BsFillBagCheckFill className="mr-1" />
+          Pay
+          <BsCurrencyRupee className="ml-1"/>
+          {subTotalAmt}
+        </button>
+      </div>
     </div>
   );
 };
 
 export default Checkout;
-{
-  /* <button className="text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg">
-            Button
-          </button> */
-}

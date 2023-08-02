@@ -34,15 +34,21 @@ export default function App({ Component, pageProps }) {
   const addToCart = (itemCode, name, qty, price, flavor, weight, category) => {
     // Deep copy of the cart object using JSON serialization
     let newCart = JSON.parse(JSON.stringify(cart));
-    if (itemCode in newCart) {
-      newCart[itemCode].qty += qty;
-    } else {
-      newCart[itemCode] = { name, qty, price, flavor, weight, category };
+    try {
+      if (itemCode in newCart) {
+        // newCart[itemCode].qty += qty;
+        // TODO: Add toastify here
+        alert("item already exists in cart")
+      } else {
+        newCart[itemCode] = { name, qty, price, flavor, weight, category };
+        alert("item added to cart successfully")
+      }
+      localStorage.setItem("cart", JSON.stringify(newCart));
+      subTotalAmtPayable(newCart)
+      setCart(newCart);
+    } catch (error) {
+      console.log(error)
     }
-    // console.log("Added to cart: ", newCart); // TODO: Add functionality for adding item to Cart here
-    localStorage.setItem("cart", JSON.stringify(newCart));
-    subTotalAmtPayable(newCart)
-    setCart(newCart);
   };
 
   const reduceFromCart = (
