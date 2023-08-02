@@ -2,16 +2,17 @@
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { FaRupeeSign, FaShoppingCart } from "react-icons/fa";
+import { FaRupeeSign, FaShoppingCart, FaHeart } from "react-icons/fa";
 
 const BaseUrl = "http://localhost:3000";
-const Slug = () => {
+const Slug = ({ addToCart }) => {
   const router = useRouter();
+  const { slug } = router.query;
   const [pin, setPin] = useState();
   const [inService, setInService] = useState();
-  const [inCart, setInCart] = useState(false);
-  const toggleAddToCart = () => {
-    setInCart(!inCart);
+  const [inWishlist, setInWishlist] = useState(false);
+  const toggleAddToWishlist = () => {
+    setInWishlist(!inWishlist);
   };
 
   const pinChangeHandler = (e) => {
@@ -27,7 +28,7 @@ const Slug = () => {
         setInService(false);
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
       setInService(null);
     }
   };
@@ -200,31 +201,50 @@ const Slug = () => {
                 </div>
               </div>
               {/* Buy */}
-              <div className="flex">
+              <div className="md:flex space-y-3 md:space-y-0">
                 <span className="title-font flex items-center font-medium text-2xl text-gray-900">
                   <FaRupeeSign /> 549.00
                 </span>
-                <button className="flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">
-                  Order Now
-                </button>
-                <button
-                  onClick={toggleAddToCart}
-                  className="rounded-full w-10 h-10 bg-gray-200 p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-4"
-                >
-                  <svg
-                    fill="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    className="w-5 h-5"
-                    viewBox="0 0 24 24"
+                <div className="flex ml-auto justify-evenly">
+                  <button className="flex text-white bg-indigo-500 border-0 py-2 px-4 focus:outline-none hover:bg-indigo-600 rounded">
+                    Order Now
+                  </button>
+                  <button
+                    onClick={() => {
+                      addToCart(
+                        slug,
+                        "The Choco Delight",
+                        1,
+                        399.0,
+                        "Chocolate",
+                        2,
+                        "Regular Cakes"
+                      );
+                    }}
+                    className="flex ml-auto md:ml-4 text-white bg-indigo-500 border-0 py-2 px-2 focus:outline-none hover:bg-indigo-600 rounded mr-auto"
                   >
-                    <FaShoppingCart
-                      size={25}
-                      className={inCart ? "text-pink-600" : ""}
-                    />
-                  </svg>
-                </button>
+                    {/*  TODO :if(item not in cart) add to cart else go to cart */}
+                    Add To Cart <FaShoppingCart size={23} className="ml-1" />
+                  </button>
+                  <button
+                    onClick={toggleAddToWishlist}
+                    className="rounded-full mr-2 md:ml-2 w-10 h-10 bg-gray-200 hover:bg-indigo-600 p-0 border-0 inline-flex items-center justify-center text-gray-800 hover:text-gray-100"
+                  >
+                    <svg
+                      fill="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      className="w-5 h-5"
+                      viewBox="0 0 24 24"
+                    >
+                      <FaHeart
+                        size={25}
+                        className={inWishlist ? "text-pink-600" : ""}
+                      />
+                    </svg>
+                  </button>
+                </div>
               </div>
               <div className="mt-6">
                 <p className="text-sm">Check Delivery In Your Area</p>
@@ -245,8 +265,12 @@ const Slug = () => {
                   </button>
                 </div>
               </div>
-              {inService != null && inService && <p>available</p>}
-              {inService != null && !inService && <p>not available</p>}
+              {inService != null && inService && (
+                <p className="text-lime-600">Yay! Delivery is available</p>
+              )}
+              {inService != null && !inService && (
+                <p className="text-red-600">Sorry, Delivery is not available</p>
+              )}
             </div>
           </div>
         </div>

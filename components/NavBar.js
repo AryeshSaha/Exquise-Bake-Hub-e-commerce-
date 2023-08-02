@@ -5,7 +5,7 @@ import { RiAccountCircleFill } from "react-icons/ri";
 import CartContent from "./CartContent";
 import { useRouter } from "next/router";
 
-const NavBar = () => {
+const NavBar = ({ cart, addToCart, reduceFromCart, clearCart, subTotalAmt }) => {
   const ref = useRef();
   const router = useRouter();
   const [isActive, setIsActive] = useState(router?.asPath);
@@ -22,7 +22,7 @@ const NavBar = () => {
     }
   };
   return (
-    <div>
+    <div className="sticky top-0 z-10 bg-gray-200">
       <header className="text-gray-600 body-font shadow-lg">
         <div className="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
           <a className="cursor-pointer flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0">
@@ -79,23 +79,31 @@ const NavBar = () => {
             </Link>
           </nav>
           <div className="flex justify-between items-center w-full md:w-auto md:block md:space-x-5">
-            <button className="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0">
-              <RiAccountCircleFill size={23} />
+            <button className="inline-flex items-cente border-0 py-1 px-3 focus:outline-none hover:bg-gray-300 rounded text-base mt-4 md:mt-0">
+              <RiAccountCircleFill size={25} />
             </button>
             <button
               onClick={toggleCart}
-              className="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0"
+              className="inline-flex items-cente border-0 py-1 px-3 focus:outline-none hover:bg-gray-300 rounded text-base mt-4 md:mt-0"
             >
-              <FaShoppingCart size={23} />
+              <FaShoppingCart size={25} />
             </button>
           </div>
 
           {/* Cart Sidebar */}
           <section
             ref={ref}
-            className="absolute top-0 right-0 transform transition-transform translate-x-full text-gray-600 body-font w-full md:w-auto h-full bg-indigo-100"
+            className="absolute top-0 right-0 transform transition-transform translate-x-full text-gray-600 body-font w-full md:w-auto h-[100vh] bg-indigo-100"
           >
-            <CartContent toggleCart={toggleCart} />
+            <CartContent
+              cart={cart}
+              addToCart={addToCart}
+              reduceFromCart={reduceFromCart}
+              clearCart={clearCart}
+              toggleCart={toggleCart}
+              subTotalAmt={subTotalAmt}
+              isCheckout={false}
+            />
           </section>
         </div>
       </header>
