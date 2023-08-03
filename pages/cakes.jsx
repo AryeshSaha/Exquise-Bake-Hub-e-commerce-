@@ -9,7 +9,7 @@ const Cakes = () => {
         <div className="container px-5 py-24 mx-auto">
           <div className="flex flex-wrap -m-4 justify-center">
             <div className="lg:w-1/4 md:w-1/2 p-4 w-full cursor-pointer mb-4 lg:mx-5 shadow-md rounded-md">
-              <Link href={"/product/cake"}>
+              <Link href={"/product/cake1"}>
                 <div className="block relative h-48 rounded overflow-hidden">
                   <img
                     alt="ecommerce"
@@ -29,7 +29,7 @@ const Cakes = () => {
               </Link>
             </div>
             <div className="lg:w-1/4 md:w-1/2 p-4 w-full cursor-pointer mb-4 lg:mx-5 shadow-md rounded-md">
-              <Link href={"/product/cake"}>
+              <Link href={"/product/cake5"}>
                 <div className="block relative h-48 rounded overflow-hidden">
                   <img
                     alt="ecommerce"

@@ -1,16 +1,24 @@
 /* eslint-disable @next/next/no-img-element */
 import axios from "axios";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaRupeeSign, FaShoppingCart, FaHeart } from "react-icons/fa";
 
 const BaseUrl = "http://localhost:3000";
-const Slug = ({ addToCart }) => {
+
+const Slug = ({ cart, addToCart }) => {
   const router = useRouter();
   const { slug } = router.query;
   const [pin, setPin] = useState();
   const [inService, setInService] = useState();
   const [inWishlist, setInWishlist] = useState(false);
+  const [inCart, setInCart] = useState();
+
+  useEffect(() => {
+    if (slug in cart) setInCart(true);
+    else setInCart(false);
+  }, [cart, slug]);
+
   const toggleAddToWishlist = () => {
     setInWishlist(!inWishlist);
   };
@@ -213,7 +221,7 @@ const Slug = ({ addToCart }) => {
                     onClick={() => {
                       addToCart(
                         slug,
-                        "The Choco Delight",
+                        "The Choco DelightThe Choco DelightThe Choco Delight",
                         1,
                         399.0,
                         "Chocolate",
@@ -221,10 +229,10 @@ const Slug = ({ addToCart }) => {
                         "Regular Cakes"
                       );
                     }}
-                    className="flex ml-auto md:ml-4 text-white bg-indigo-500 border-0 py-2 px-2 focus:outline-none hover:bg-indigo-600 rounded mr-auto"
+                    className="capitalize flex ml-auto md:ml-4 text-white bg-indigo-500 border-0 py-2 px-2 focus:outline-none hover:bg-indigo-600 rounded mr-auto"
                   >
-                    {/*  TODO :if(item not in cart) add to cart else go to cart */}
-                    Add To Cart <FaShoppingCart size={23} className="ml-1" />
+                    {inCart ? "go to cart" : "add to cart"}{" "}
+                    <FaShoppingCart size={23} className="ml-1" />
                   </button>
                   <button
                     onClick={toggleAddToWishlist}

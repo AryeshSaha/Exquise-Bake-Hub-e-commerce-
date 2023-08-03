@@ -102,7 +102,7 @@ const NavBar = ({
           {/* Cart Sidebar */}
           <section
             ref={ref}
-            className="absolute top-0 right-0 transform transition-transform translate-x-full text-gray-600 body-font w-full md:w-auto h-[100vh] bg-indigo-100"
+            className="absolute top-0 right-0 transform transition-transform translate-x-full text-gray-600 body-font w-full md:w-auto md:min-w-[25rem] h-[100vh] bg-indigo-100"
           >
             <CartContent
               cart={cart}
