@@ -1,9 +1,10 @@
 import Link from "next/link";
-import React, { useRef, useState } from "react";
+import React from "react";
 import { FaShoppingCart } from "react-icons/fa";
 import { RiAccountCircleFill } from "react-icons/ri";
 import CartContent from "./CartContent";
-import { useRouter } from "next/router";
+import { useCart } from "@/context/useCart";
+import { Tooltip } from "react-tooltip";
 
 const NavBar = ({
   cart,
@@ -12,25 +13,13 @@ const NavBar = ({
   clearCart,
   subTotalAmt,
 }) => {
-  const ref = useRef();
-  const router = useRouter();
-  const [isActive, setIsActive] = useState(router?.asPath);
+  const { isCartOpen, toggleCart } = useCart();
 
-  const navActiveItem = (path) => setIsActive(path);
-
-  const toggleCart = () => {
-    if (ref.current.classList.contains("translate-x-full")) {
-      ref.current.classList.remove("translate-x-full");
-      ref.current.classList.add("translate-x-0");
-    } else if (!ref.current.classList.contains("translate-x-full")) {
-      ref.current.classList.remove("translate-x-0");
-      ref.current.classList.add("translate-x-full");
-    }
-  };
   return (
     <div className="sticky top-0 z-10 bg-gray-200">
       <header className="text-gray-600 body-font shadow-lg">
         <div className="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
+          {/* logo */}
           <a className="cursor-pointer flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -46,63 +35,61 @@ const NavBar = ({
             </svg>
             <span className="ml-3 text-xl">ExquiseBakeHub</span>
           </a>
-          {/* TODO: Active Link problem */}
+          {/* nav items */}
           <nav className="md:ml-auto md:mr-auto flex flex-wrap items-center text-base justify-center space-x-5 md:space-x-10">
             <Link
               href={"/"}
-              onClick={(e) => navActiveItem("/")}
-              className={`hover:text-indigo-900 ${
-                isActive === "/" ? "font-bold" : ""
-              }`}
+              className="text-gray-800 font-semibold hover:text-indigo-500 hover:border-b-2 hover:border-indigo-500 transition-transform"
             >
               Home
             </Link>
             <Link
               href={"/cakes"}
-              onClick={(e) => navActiveItem("/cakes")}
-              className={`hover:text-indigo-900 ${
-                isActive === "/cakes" ? "font-bold" : ""
-              }`}
+              className="text-gray-800 font-semibold hover:text-indigo-500 hover:border-b-2 hover:border-indigo-500 transition-transform"
             >
-              Products
+              Cakes
             </Link>
             <Link
-              href={"/about"}
-              onClick={(e) => navActiveItem("/about")}
-              className={`hover:text-indigo-900 ${
-                isActive === "/about" ? "font-bold" : ""
-              }`}
+              href={"/mousses"}
+              className="text-gray-800 font-semibold hover:text-indigo-500 hover:border-b-2 hover:border-indigo-500 transition-transform"
             >
-              About
+              Mousses
             </Link>
             <Link
-              href={"/contact"}
-              onClick={(e) => navActiveItem("/contact")}
-              className={`hover:text-indigo-900 ${
-                isActive === "/contact" ? "font-bold" : ""
-              }`}
+              href={"/create"}
+              className="text-gray-800 font-semibold hover:text-indigo-500 hover:border-b-2 hover:border-indigo-500 transition-transform"
             >
-              Contact
+              Create a Cake
             </Link>
           </nav>
+          {/* account and cart btns */}
           <div className="flex justify-between items-center w-full md:w-auto md:block md:space-x-2">
             <Link href={"/login"}>
-              <button className="inline-flex items-cente border-0 p-2 focus:outline-none hover:bg-gray-300 rounded-full text-base mt-4 md:mt-0">
+              <button
+                className="inline-flex items-cente border-0 p-2 focus:outline-none hover:bg-gray-300 rounded-full text-base mt-4 md:mt-0"
+                data-tooltip-id="account"
+                data-tooltip-content="Account"
+              >
                 <RiAccountCircleFill size={25} />
               </button>
             </Link>
+            <Tooltip id="account" />
             <button
               onClick={toggleCart}
               className="inline-flex items-cente border-0 p-2 focus:outline-none hover:bg-gray-300 rounded-full text-base mt-4 md:mt-0"
+              data-tooltip-id="cart"
+              data-tooltip-content="Your Cart"
             >
               <FaShoppingCart size={25} />
             </button>
+            <Tooltip id="cart" />
           </div>
 
           {/* Cart Sidebar */}
           <section
-            ref={ref}
-            className="absolute top-0 right-0 transform transition-transform translate-x-full text-gray-600 body-font w-full md:w-auto md:min-w-[25rem] h-[100vh] bg-indigo-100"
+            className={`absolute top-0 right-0 transform transition-transform ${
+              isCartOpen ? "translate-x-0" : "translate-x-full"
+            } text-gray-600 body-font w-full md:w-auto md:min-w-[25rem] h-[100vh] overflow-y-scroll bg-indigo-100`}
           >
             <CartContent
               cart={cart}

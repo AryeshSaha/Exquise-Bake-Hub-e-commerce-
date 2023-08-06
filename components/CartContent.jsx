@@ -55,7 +55,14 @@ const CartContent = ({
               <tbody>
                 {Object.keys(cart).map((item) => (
                   <tr key={item}>
-                    <td className="px-2 py-3">{cart[item].name}</td>
+                    <td className="px-2 py-3">
+                      <div className="flex flex-col">
+                        <div className="text-lg font-medium">{cart[item].name}</div>
+                        <div className="text-md font-normal">
+                          ({cart[item].flavor}/{cart[item].weight} {cart[item].weight < 2 ? "pound" : "pounds"})
+                        </div>
+                      </div>
+                    </td>
                     <td className="px-2 py-3 font-semibold text-lg text-gray-900">
                       <div className="flex justify-center items-center">
                         <FaMinus

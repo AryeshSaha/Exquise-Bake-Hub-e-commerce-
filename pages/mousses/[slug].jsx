@@ -9,7 +9,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Tooltip } from "react-tooltip";
 
-const Slug = ({ cart, addToCart, cake, variants, orderNow }) => {
+const Slug = ({ cart, addToCart, mousse, variants, orderNow }) => {
   const { toggleCart } = useCart();
   const router = useRouter();
   const { slug } = router.query;
@@ -17,25 +17,31 @@ const Slug = ({ cart, addToCart, cake, variants, orderNow }) => {
   const [inService, setInService] = useState();
   const [inWishlist, setInWishlist] = useState(false);
   const [inCart, setInCart] = useState();
-  const [weight, setWeight] = useState(cake.weight);
-  const [flavor, setFlavor] = useState(cake.flavor);
+  const [weight, setWeight] = useState(mousse.weight);
+  const [flavor, setFlavor] = useState(mousse.flavor);
   const colors = {
     butterscotch: "#E3963E",
     chocolate: "#7B3F00",
     vanilla: "#F3E5AB",
     strawberry: "#c83f49",
+    lemon: "#91ff00",
+    honey: "#bd8c06",
   };
 
   useEffect(() => {
     if (slug in cart) setInCart(true);
     else setInCart(false);
-    setFlavor(cake.flavor);
-    setWeight(cake.weight);
-  }, [cart, slug, cake.flavor, cake.weight]);
+    setFlavor(mousse.flavor);
+    setWeight(mousse.weight);
+  }, [cart, slug, mousse.flavor, mousse.weight]);
 
-  const handleOptionsChange = (w, f) => {
-    const url = `${BaseUrl}/product/${variants[f][w].slug}`;
-    // window.location = url;
+  const handleFlavorChange = (f) => {
+    const url = `${BaseUrl}/mousses/${variants[f][0].slug}`;
+    router.push(url, undefined, { shallow: false });
+  };
+  const handleWeightChange = (f, s) => {
+    const slugUrl = variants[f].find((i) => i.slug == s).slug;
+    const url = `${BaseUrl}/mousses/${slugUrl}`;
     router.push(url, undefined, { shallow: false });
   };
 
@@ -89,14 +95,14 @@ const Slug = ({ cart, addToCart, cake, variants, orderNow }) => {
             <img
               alt="ecommerce"
               className="lg:w-1/2 w-full lg:h-auto h-64 object-cover object-center rounded"
-              src={cake.img}
+              src={mousse.img}
             />
             <div className="lg:w-1/2 w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0">
               <h2 className="text-sm title-font text-gray-500 tracking-widest">
                 E.B. Hub Presents
               </h2>
               <h1 className="text-gray-900 text-3xl title-font font-medium mb-1">
-                {cake.title} ({flavor}/{weight}
+                {mousse.title} ({flavor}/{weight}
                 {weight < 2 ? "pound" : "pounds"})
               </h1>
               <div className="flex mb-4">
@@ -200,30 +206,27 @@ const Slug = ({ cart, addToCart, cake, variants, orderNow }) => {
                 </span>
               </div>
               {/* product desc */}
-              <p className="leading-relaxed">{cake.desc}</p>
+              <p className="leading-relaxed">{mousse.desc}</p>
               <div className="flex mt-6 items-center pb-5 border-b-2 border-gray-100 mb-5">
                 {/* Flavors */}
                 <div className="flex">
                   <span className="mr-3">Flavors</span>
                   {/* TODO: add tooltips on each color for showing the flavor names e.g choco, vanilla, butterscotch, etc. */}
-                  {Object.keys(variants).map(
-                    (v) =>
-                      variants[v][cake.weight] && (
-                        <button
-                          key={variants[v][weight]?.slug}
-                          onClick={() => handleOptionsChange(weight, v)}
-                          className={`border-2 ml-1 rounded-full w-6 h-6 focus:outline-none ${
-                            v == flavor ? "border-indigo-300" : ""
-                          }`}
-                          style={{ backgroundColor: colors[v.toLowerCase()] }}
-                          data-tooltip-id="flavors"
-                          data-tooltip-content={v}
-                          data-tooltip-place="top"
-                          data-tooltip-delay-show={500}
-                          data-tooltip-delay-hide={1000}
-                        ></button>
-                      )
-                  )}
+                  {Object.keys(variants).map((v) => (
+                    <button
+                      key={v}
+                      onClick={() => handleFlavorChange(v)}
+                      className={`border-2 ml-1 rounded-full w-6 h-6 focus:outline-none ${
+                        v == flavor ? "border-indigo-300" : ""
+                      }`}
+                      style={{ backgroundColor: colors[v.toLowerCase()] }}
+                      data-tooltip-id="flavors"
+                      data-tooltip-content={v}
+                      data-tooltip-place="top"
+                      data-tooltip-delay-show={500}
+                      data-tooltip-delay-hide={1000}
+                    ></button>
+                  ))}
                   <Tooltip
                     id="flavors"
                     style={{
@@ -233,26 +236,22 @@ const Slug = ({ cart, addToCart, cake, variants, orderNow }) => {
                     className="font-semibold"
                   />
                 </div>
-                {/* cake weight */}
+                {/* mousse weight */}
                 <div className="flex ml-6 md:ml-auto items-center">
                   <span className="mr-3">Pounds</span>
                   <div className="relative">
                     <select
-                      value={weight}
+                      value={slug}
                       onChange={(e) =>
-                        handleOptionsChange(e.target.value, flavor)
+                        handleWeightChange(flavor, e.target.value)
                       }
                       className="rounded border appearance-none border-gray-300 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500 text-base pl-3 pr-10"
                     >
-                      <option value={weight}>{weight}</option>
-                      {Object.keys(variants[flavor]).map(
-                        (w) =>
-                          w != weight && (
-                            <option key={variants[flavor][w]?.slug} value={w}>
-                              {w}
-                            </option>
-                          )
-                      )}
+                      {variants[flavor].map((w) => (
+                        <option key={w.slug} value={w.slug}>
+                          {w.weight}
+                        </option>
+                      ))}
                     </select>
                     <span className="absolute right-0 top-0 h-full w-10 text-center text-gray-600 pointer-events-none flex items-center justify-center">
                       <svg
@@ -273,19 +272,19 @@ const Slug = ({ cart, addToCart, cake, variants, orderNow }) => {
               {/* Buy */}
               <div className="md:flex lg:flex-col xl:flex-row space-y-3 md:space-y-0">
                 <span className="title-font flex items-center font-medium text-2xl lg:mr-3 text-gray-900">
-                  <FaRupeeSign /> {cake.price}.00
+                  <FaRupeeSign /> {mousse.price}.00
                 </span>
                 <div className="flex ml-auto lg:ml-2 xl:ml-auto justify-evenly">
                   <button
                     onClick={() =>
                       orderNow(
                         slug,
-                        cake.title,
+                        mousse.title,
                         1,
-                        cake.price,
-                        cake.flavor,
-                        cake.weight,
-                        cake.category
+                        mousse.price,
+                        mousse.flavor,
+                        mousse.weight,
+                        mousse.category
                       )
                     }
                     className="flex text-white bg-indigo-500 border-0 py-2 px-4 focus:outline-none hover:bg-indigo-600 rounded"
@@ -297,12 +296,12 @@ const Slug = ({ cart, addToCart, cake, variants, orderNow }) => {
                       if (!inCart) {
                         addToCart(
                           slug,
-                          cake.title,
+                          mousse.title,
                           1,
-                          cake.price,
-                          cake.flavor,
-                          cake.weight,
-                          cake.category
+                          mousse.price,
+                          mousse.flavor,
+                          mousse.weight,
+                          mousse.category
                         );
                       } else {
                         toast.warning("Item already exists in cart", {
@@ -380,14 +379,14 @@ const Slug = ({ cart, addToCart, cake, variants, orderNow }) => {
 export async function getServerSideProps(context) {
   // Fetching data from external API
   try {
-    const { data } = await axios.post(`${BaseUrl}/api/getslug`, {
+    const { data } = await axios.post(`${BaseUrl}/api/getslug1`, {
       slug: context.query.slug,
     });
     // Passing data to the page via props
-    return { props: { cake: data.cake, variants: data.variants } };
+    return { props: { mousse: data.mousse, variants: data.variants } };
   } catch (error) {
     console.log(error);
-    return { props: { cake: [] } };
+    return { props: { mousse: [] } };
   }
 }
 

@@ -1,3 +1,4 @@
+// TODO: Add sub-category for occassions and also rename this model as Products
 const mongoose = require("mongoose");
 
 const ProductSchema = new mongoose.Schema(
@@ -18,6 +19,7 @@ const ProductSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    // * different flavor of each Product for variants
     flavor: String,
     weight: Number,
     slug: {
