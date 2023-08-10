@@ -7,7 +7,6 @@ import { useRouter } from "next/router";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import LoadingBar from "react-top-loading-bar";
-import NewNav from "@/components/NewNav";
 
 export const BaseUrl = "http://localhost:3000";
 
@@ -143,7 +142,14 @@ export default function App({ Component, pageProps }) {
   };
   return (
     <>
-      {/* <CartProvider>
+      <CartProvider>
+        <LoadingBar
+          color="#4b4dca"
+          progress={progress}
+          waitingTime={400}
+          height={3}
+          onLoaderFinished={() => setProgress(0)}
+        />
         <ToastContainer
           position="bottom-left"
           autoClose={3000}
@@ -155,13 +161,6 @@ export default function App({ Component, pageProps }) {
           draggable
           pauseOnHover
           theme="colored"
-        />
-        <LoadingBar
-          color="#4b4dca"
-          progress={progress}
-          waitingTime={400}
-          height={3}
-          onLoaderFinished={() => setProgress(0)}
         />
         <NavBar
           user={user}
@@ -184,10 +183,7 @@ export default function App({ Component, pageProps }) {
           {...pageProps}
         />
         <Footer />
-      </CartProvider> */}
-      <NewNav />
-      <Component {...pageProps} />
-      <Footer />
+      </CartProvider>
     </>
   );
 }

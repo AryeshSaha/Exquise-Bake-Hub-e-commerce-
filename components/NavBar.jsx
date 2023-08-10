@@ -33,9 +33,9 @@ const NavBar = ({
   };
 
   return (
-    <div className="bg-gray-200 text-gray-600 shadow-lg flex flex-wrap p-5 items-center sticky top-0 z-50">
+    <div className="bg-gray-200 text-gray-600 shadow-lg flex flex-wrap p-5 items-center sticky top-0 z-50 md:px-32">
       {/* logo */}
-      <div className="cursor-pointer flex title-font font-medium items-center text-gray-900 md:mr-12 lg:mr-24 xl:mr-40">
+      <div className="cursor-pointer flex title-font font-medium items-center text-gray-900 md:mr-12 lg:mr-24 xl:mr-40 2xl:72">
         {/* burger menu button */}
         <button
           className="border-none outline-none bg-transparent rounded-sm md:hidden"
