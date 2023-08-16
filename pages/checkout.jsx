@@ -73,6 +73,7 @@ const Checkout = ({ cart, subTotalAmt, addToCart, reduceFromCart }) => {
         order_id: order.id,
         callback_url: `${BaseUrl}/api/paymentverification`,
         prefill: {
+          // Review: get user details and prefill them
           name: "Gaurav Kumar",
           email: "gaurav.kumar@example.com",
           contact: "9000090000",
