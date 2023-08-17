@@ -1,12 +1,21 @@
 import dbCon from "@/middlewares/dbCon";
 import Order from "@/models/Order";
+import Product from "@/models/Product";
 import Razorpay from "razorpay";
 
 const handler = async (req, res) => {
   if (req.method == "POST") {
     const { name, email, products, amount, address, phone, pincode } = req.body
 
-    // Review: tampering of cart items
+    // Review: tampering of cart items is getting checked
+    let product;
+    for(let i in products){
+      product = await Product.findOne({ slug: i })
+      if (product.price != products[i].price) {
+        res.status(403).json({ success: false, error: "Prices have been tampered with. Try again." })
+        return;
+      }
+    }
     
     // Review: details validity
 
@@ -40,10 +49,10 @@ const handler = async (req, res) => {
       address,
     })
 
-    if (!order) console.log("no order is created");
-    else res.status(200).json({ order });
+    if (!order) res.status(500).json({ success: false, error: "couldn't create order" });
+    else res.status(200).json({ success: true, order });
   } else {
-    res.status(400).json({ msg: "bad request" });
+    res.status(400).json({ success: false, error: "bad request" });
   }
 };
 

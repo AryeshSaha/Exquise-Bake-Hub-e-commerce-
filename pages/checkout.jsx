@@ -3,6 +3,8 @@ import axios from "axios";
 import React, { useState } from "react";
 import { BsCurrencyRupee, BsFillBagCheckFill } from "react-icons/bs";
 import { BaseUrl } from "./_app";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Checkout = ({ cart, subTotalAmt, addToCart, reduceFromCart }) => {
   const [name, setName] = useState("");
@@ -76,7 +78,16 @@ const Checkout = ({ cart, subTotalAmt, addToCart, reduceFromCart }) => {
       });
 
       if (!order) {
-        alert("Server error. Are you online?");
+        toast.error("Server Error. Make sure you're online", {
+          position: "bottom-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
         return;
       }
 
@@ -108,7 +119,17 @@ const Checkout = ({ cart, subTotalAmt, addToCart, reduceFromCart }) => {
       const rzpPopup = new window.Razorpay(options);
       rzpPopup.open();
     } catch (error) {
-      console.log(error);
+      console.log(error.response.data)
+      toast.error(error.response.data.error, {
+        position: "bottom-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
     }
   };
 
@@ -261,6 +282,7 @@ const Checkout = ({ cart, subTotalAmt, addToCart, reduceFromCart }) => {
           {subTotalAmt}
         </button>
       </div>
+      <ToastContainer rtl={false} pauseOnFocusLoss />
     </div>
   );
 };
