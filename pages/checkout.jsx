@@ -5,29 +5,41 @@ import { BsCurrencyRupee, BsFillBagCheckFill } from "react-icons/bs";
 import { BaseUrl } from "./_app";
 
 const Checkout = ({ cart, subTotalAmt, addToCart, reduceFromCart }) => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [pincode, setPincode] = useState("");
+  const [address, setAddress] = useState("");
+  const [city, setCity] = useState("");
+  const [state, setState] = useState("");
+  const [disabled, setDisabled] = useState(true);
 
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [phone, setPhone] = useState('')
-  const [pincode, setPincode] = useState('')
-  const [address, setAddress] = useState('')
-  const [disabled, setDisabled] = useState(true)
-
-  const handleChange = (e) => {
-    if (e.target.name == 'name')
-      setName(e.target.value)
-    else if (e.target.name == 'phone')
-      setPhone(e.target.value)
-    else if (e.target.name == 'email')
-      setEmail(e.target.value)
-    else if (e.target.name == 'pincode')
-      setPincode(e.target.value)
-    else if (e.target.name == 'address')
-      setAddress(e.target.value)
+  const handleChange = async (e) => {
+    if (e.target.name == "name") setName(e.target.value);
+    else if (e.target.name == "phone") setPhone(e.target.value);
+    else if (e.target.name == "email") setEmail(e.target.value);
+    else if (e.target.name == "pincode") {
+      setPincode(e.target.value);
+      if (e.target.value.length == 6) {
+        let value = e.target.value;
+        const {
+          data: { pincodes },
+        } = await axios.get(`${BaseUrl}/api/pincode`);
+        if (Object.keys(pincodes).includes(value)) {
+          setCity(pincodes[value][0]);
+          setState(pincodes[value][1]);
+        } else {
+          setCity("");
+          setState("");
+        }
+      } else {
+        setCity("");
+        setState("");
+      }
+    } else if (e.target.name == "address") setAddress(e.target.value);
     // Review: Form Validation not done properly
-    if (name && email && pincode)
-      setDisabled(false)
-  }
+    if (name && email && pincode) setDisabled(false);
+  };
 
   const loadScript = (src) => {
     return new Promise((resolve) => {
@@ -39,12 +51,14 @@ const Checkout = ({ cart, subTotalAmt, addToCart, reduceFromCart }) => {
       script.onerror = () => {
         resolve(false);
       };
-     document.body.appendChild(script);
-   });
+      document.body.appendChild(script);
+    });
   };
 
   const checkoutHandler = async () => {
-    const res = await loadScript("https://checkout.razorpay.com/v1/checkout.js");
+    const res = await loadScript(
+      "https://checkout.razorpay.com/v1/checkout.js"
+    );
 
     if (!res) {
       alert("Razorpay SDK failed to load. Are you online?");
@@ -52,8 +66,13 @@ const Checkout = ({ cart, subTotalAmt, addToCart, reduceFromCart }) => {
     }
 
     try {
-      const { data: { order } } = await axios.post(`${BaseUrl}/api/createorder`, {
-        email, products: cart, amount: subTotalAmt, address,
+      const {
+        data: { order },
+      } = await axios.post(`${BaseUrl}/api/createorder`, {
+        email,
+        products: cart,
+        amount: subTotalAmt,
+        address,
       });
 
       if (!order) {
@@ -69,7 +88,8 @@ const Checkout = ({ cart, subTotalAmt, addToCart, reduceFromCart }) => {
         currency: "INR",
         name: "Exquiz Bakery",
         description: "Test Transaction",
-        image: "https://images.unsplash.com/photo-1516919549054-e08258825f80?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
+        image:
+          "https://images.unsplash.com/photo-1516919549054-e08258825f80?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
         order_id: order.id,
         callback_url: `${BaseUrl}/api/paymentverification`,
         prefill: {
@@ -115,10 +135,7 @@ const Checkout = ({ cart, subTotalAmt, addToCart, reduceFromCart }) => {
         </div>
         <div className="px-2 w-1/2">
           <div className="mb-4">
-            <label
-              htmlFor="email"
-              className="leading-7 text-sm text-gray-600"
-            >
+            <label htmlFor="email" className="leading-7 text-sm text-gray-600">
               Email
             </label>
             <input
@@ -196,6 +213,8 @@ const Checkout = ({ cart, subTotalAmt, addToCart, reduceFromCart }) => {
               type="text"
               id="state"
               name="state"
+              onChange={handleChange}
+              value={state}
               className="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
               readOnly={true}
             />
@@ -210,6 +229,8 @@ const Checkout = ({ cart, subTotalAmt, addToCart, reduceFromCart }) => {
               type="text"
               id="city"
               name="city"
+              onChange={handleChange}
+              value={city}
               className="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
               readOnly={true}
             />

@@ -16,7 +16,7 @@ export default function Home() {
         />
         <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
       </Head>
-      <Image src="/home.jpg" alt="bg wallpaper" width={1920} height={720} />
+      <Image src="/homewallpaper.jpg" alt="bg wallpaper" width={1920} height={720} />
       <HomeContent />
     </>
   );

@@ -49,8 +49,8 @@ const Slug = ({ cart, addToCart, cake, variants, orderNow }) => {
 
   const serviceability = async () => {
     try {
-      const data1 = await axios.get(`${BaseUrl}/api/pincode`);
-      if (data1?.data.includes(parseInt(pin))) {
+      const { data: { pincodes } } = await axios.get(`${BaseUrl}/api/pincode`);
+      if (Object.keys(pincodes).includes(pin)) {
         setInService(true);
         toast.success("Yay! your area is deliverable", {
           position: "bottom-left",

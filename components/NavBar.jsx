@@ -35,10 +35,10 @@ const NavBar = ({
   return (
     <div className="bg-gray-200 text-gray-600 shadow-lg flex flex-wrap p-5 items-center sticky top-0 z-50 md:px-32">
       {/* logo */}
-      <div className="cursor-pointer flex title-font font-medium items-center text-gray-900 md:mr-12 lg:mr-24 xl:mr-40 2xl:72">
+      <div className="cursor-pointer flex title-font font-medium items-center text-gray-900 lg:mr-24 xl:mr-40 2xl:72">
         {/* burger menu button */}
         <button
-          className="border-none outline-none bg-transparent rounded-sm md:hidden"
+          className="border-none outline-none bg-transparent rounded-sm lg:hidden"
           onClick={() => {
             setDropdown(false);
             setIsBurger(!isBurger);
@@ -53,11 +53,10 @@ const NavBar = ({
         <span className="ml-2 text-xl">ExquiseBakeHub</span>
       </div>
       {/* nav items */}
-      {/* <nav className="flex flex-wrap items-center text-base justify-center md:ml-auto md:mr-auto md:space-x-10"> */}
       <nav
         className={`${
           isBurger ? "hidden" : "flex"
-        } flex-col absolute top-20 right-0 w-full bg-gray-800 shadow-xl rounded-lg space-y-3 py-4 transition-all duration-1000 ease-in-out md:static md:w-auto md:bg-transparent md:shadow-none md:rounded-none md:flex flex-wrap items-center text-base justify-center md:flex-row md:ml-auto md:mr-auto md:py-0 md:space-y-0 md:space-x-10`}
+        } flex-col absolute top-20 right-0 w-full bg-gray-800 shadow-xl rounded-lg space-y-3 py-4 transition-all duration-1000 ease-in-out lg:static lg:w-auto lg:bg-transparent lg:shadow-none lg:rounded-none lg:flex flex-wrap items-center text-base justify-center lg:flex-row lg:ml-auto lg:mr-auto lg:py-0 lg:space-y-0 lg:space-x-10`}
       >
         <Link
           href={"/"}

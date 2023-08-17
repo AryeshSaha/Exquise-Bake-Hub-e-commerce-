@@ -1,3 +1,10 @@
 export default function handler(req, res) {
-  res.status(200).json([700027, 700007, 743294, 700132, 700155, 700135]);
+  const pincodes = {
+    700001: ["Kolkata", "West Bengal"],
+    600001: ["Chennai", "Tamil Nadu"],
+    560001: ["Bangalore", "Karnataka"],
+    110001: ["Delhi", "Delhi"],
+    400001: ["Mumbai", "Maharashtra"],
+  };
+  res.status(200).json({ pincodes });
 }

@@ -98,7 +98,7 @@ const CartContent = ({
                     </td>
                     <td className="px-2 py-3 text-md md:text-lg font-medium text-gray-900">
                       <div className="flex justify-center items-center">
-                        <FaRupeeSign /> {cart[item].price}
+                        <FaRupeeSign /> {cart[item].price}/-
                       </div>
                     </td>
                   </tr>

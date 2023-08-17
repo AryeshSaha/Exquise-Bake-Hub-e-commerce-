@@ -14,7 +14,7 @@ const Order = ({ order }) => {
             <h2 className="text-sm uppercase title-font text-gray-500 tracking-widest">
               exquisebakehub.com
             </h2>
-            <h1 className="text-gray-900 text-2xl title-font font-medium mb-4">
+            <h1 className="text-gray-900 text-xl sm:text-2xl title-font font-medium mb-4">
               Order Id - {orderId}
             </h1>
             <p className="leading-relaxed mb-4 capitalize">
@@ -70,8 +70,8 @@ const Order = ({ order }) => {
           </div>
           <img
             alt="ecommerce"
-            className="lg:w-1/2 w-full lg:h-auto h-64 object-cover object-center rounded"
-            src="https://dummyimage.com/400x400"
+            className="lg:w-1/2 w-full lg:h-auto h-96 object-cover object-center rounded-lg"
+            src="https://pic.cakesdecor.com/c400/vcutrc5lss8yuzptyir2.jpg"
           />
         </div>
       </div>
