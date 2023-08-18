@@ -7,10 +7,17 @@ const handler = async (req, res) => {
   if (req.method == "POST") {
     const { name, email, products, amount, address, phone, pincode } = req.body
 
-    // Review: tampering of cart items is getting checked
     let product;
     for(let i in products){
       product = await Product.findOne({ slug: i })
+      
+      // Review: if availableQty  is less than ordered qty
+      if (product.availableQty < products[i].qty) {
+        res.status(500).json({ success: false, error: "Unavailable, try reducing the quantity." })
+        return;
+      }
+
+      // Review: tampering of cart items is getting checked
       if (product.price != products[i].price) {
         res.status(403).json({ success: false, error: "Prices have been tampered with. Try again." })
         return;
@@ -19,7 +26,6 @@ const handler = async (req, res) => {
     
     // Review: details validity
 
-    // Review: if items are out of stock
 
     const rzp = new Razorpay({
       key_id: process.env.RZP_KEY_ID,

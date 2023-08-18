@@ -1,12 +1,17 @@
 import CartContent from "@/components/CartContent";
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BsCurrencyRupee, BsFillBagCheckFill } from "react-icons/bs";
 import { BaseUrl } from "./_app";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const Checkout = ({ cart, subTotalAmt, addToCart, reduceFromCart }) => {
+const Checkout = ({
+  cart,
+  subTotalAmt,
+  addToCart,
+  reduceFromCart,
+}) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -16,10 +21,41 @@ const Checkout = ({ cart, subTotalAmt, addToCart, reduceFromCart }) => {
   const [state, setState] = useState("");
   const [disabled, setDisabled] = useState(true);
 
+  const fetchMe = async () => {
+    const token = localStorage.getItem("token");
+    const config = {
+      headers: {
+        Authorization: token,
+      },
+    };
+    try {
+      const {
+        data: { user },
+      } = await axios.get(`${BaseUrl}/api/fetchme`, config);
+      setName(user.name)
+      setEmail(user.email)
+    } catch (error) {
+      toast.error(error.response.data.error, {
+        position: "bottom-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    }
+  };
+
+  useEffect(() => {
+    fetchMe()
+  }, [])
+  
+
   const handleChange = async (e) => {
     if (e.target.name == "name") setName(e.target.value);
     else if (e.target.name == "phone") setPhone(e.target.value);
-    else if (e.target.name == "email") setEmail(e.target.value);
     else if (e.target.name == "pincode") {
       setPincode(e.target.value);
       if (e.target.value.length == 6) {
@@ -119,7 +155,6 @@ const Checkout = ({ cart, subTotalAmt, addToCart, reduceFromCart }) => {
       const rzpPopup = new window.Razorpay(options);
       rzpPopup.open();
     } catch (error) {
-      console.log(error.response.data)
       toast.error(error.response.data.error, {
         position: "bottom-center",
         autoClose: 5000,
@@ -164,8 +199,8 @@ const Checkout = ({ cart, subTotalAmt, addToCart, reduceFromCart }) => {
               id="email"
               name="email"
               value={email}
-              onChange={handleChange}
               className="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+              readOnly={true}
             />
           </div>
         </div>

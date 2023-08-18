@@ -1,5 +1,6 @@
 import dbCon from "@/middlewares/dbCon";
 import Order from "@/models/Order";
+import Product from "@/models/Product";
 import crypto from "node:crypto";
 
 const Handler = async (req, res) => {
@@ -21,6 +22,10 @@ const Handler = async (req, res) => {
         { orderId: razorpay_order_id },
         { status: "Paid", paymentInfo: req.body }
       );
+      const products = order.products
+      for (let i in products) {
+        await Product.findOneAndUpdate({ slug: i }, { $inc: { "availableQty": -products[i].qty }})
+      }
       res.status(200).redirect(`/order?orderId=${order.orderId}`);
     } else {
       const order = await Order.findOneAndUpdate(
