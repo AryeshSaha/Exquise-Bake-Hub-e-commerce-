@@ -33,9 +33,13 @@ const Slug = ({ cart, addToCart, cake, variants, orderNow }) => {
     setWeight(cake.weight);
   }, [cart, slug, cake.flavor, cake.weight]);
 
-  const handleOptionsChange = (w, f) => {
-    const url = `${BaseUrl}/product/${variants[f][w].slug}`;
-    // window.location = url;
+  const handleFlavorChange = (f) => {
+    const url = `${BaseUrl}/product/${variants[f][0].slug}`;
+    router.push(url, undefined, { shallow: false });
+  };
+  const handleWeightChange = (f, s) => {
+    const slugUrl = variants[f].find((i) => i.slug == s).slug;
+    const url = `${BaseUrl}/product/${slugUrl}`;
     router.push(url, undefined, { shallow: false });
   };
 
@@ -49,7 +53,9 @@ const Slug = ({ cart, addToCart, cake, variants, orderNow }) => {
 
   const serviceability = async () => {
     try {
-      const { data: { pincodes } } = await axios.get(`${BaseUrl}/api/pincode`);
+      const {
+        data: { pincodes },
+      } = await axios.get(`${BaseUrl}/api/pincode`);
       if (Object.keys(pincodes).includes(pin)) {
         setInService(true);
         toast.success("Yay! your area is deliverable", {
@@ -205,24 +211,21 @@ const Slug = ({ cart, addToCart, cake, variants, orderNow }) => {
                 {/* Flavors */}
                 <div className="flex">
                   <span className="mr-3">Flavors</span>
-                  {Object.keys(variants).map(
-                    (v) =>
-                      variants[v][cake.weight] && (
-                        <button
-                          key={variants[v][weight]?.slug}
-                          onClick={() => handleOptionsChange(weight, v)}
-                          className={`border-2 ml-1 rounded-full w-6 h-6 focus:outline-none ${
-                            v == flavor ? "border-indigo-300" : ""
-                          }`}
-                          style={{ backgroundColor: colors[v.toLowerCase()] }}
-                          data-tooltip-id="flavors"
-                          data-tooltip-content={v}
-                          data-tooltip-place="top"
-                          data-tooltip-delay-show={500}
-                          data-tooltip-delay-hide={1000}
-                        ></button>
-                      )
-                  )}
+                  {Object.keys(variants).map((v) => (
+                    <button
+                      key={v}
+                      onClick={() => handleFlavorChange(v)}
+                      className={`border-2 ml-1 rounded-full w-6 h-6 focus:outline-none ${
+                        v == flavor ? "border-indigo-300" : ""
+                      }`}
+                      style={{ backgroundColor: colors[v.toLowerCase()] }}
+                      data-tooltip-id="flavors"
+                      data-tooltip-content={v}
+                      data-tooltip-place="top"
+                      data-tooltip-delay-show={500}
+                      data-tooltip-delay-hide={1000}
+                    ></button>
+                  ))}
                   <Tooltip
                     id="flavors"
                     style={{
@@ -237,21 +240,17 @@ const Slug = ({ cart, addToCart, cake, variants, orderNow }) => {
                   <span className="mr-3">Pounds</span>
                   <div className="relative">
                     <select
-                      value={weight}
+                      value={slug}
                       onChange={(e) =>
-                        handleOptionsChange(e.target.value, flavor)
+                        handleWeightChange(flavor, e.target.value)
                       }
                       className="rounded border appearance-none border-gray-300 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500 text-base pl-3 pr-10"
                     >
-                      <option value={weight}>{weight}</option>
-                      {Object.keys(variants[flavor]).map(
-                        (w) =>
-                          w != weight && (
-                            <option key={variants[flavor][w]?.slug} value={w}>
-                              {w}
-                            </option>
-                          )
-                      )}
+                      {variants[flavor].map((w) => (
+                        <option key={w.slug} value={w.slug}>
+                          {w.weight}
+                        </option>
+                      ))}
                     </select>
                     <span className="absolute right-0 top-0 h-full w-10 text-center text-gray-600 pointer-events-none flex items-center justify-center">
                       <svg

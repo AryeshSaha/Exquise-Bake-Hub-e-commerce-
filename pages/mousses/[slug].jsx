@@ -211,7 +211,6 @@ const Slug = ({ cart, addToCart, mousse, variants, orderNow }) => {
                 {/* Flavors */}
                 <div className="flex">
                   <span className="mr-3">Flavors</span>
-                  {/* TODO: add tooltips on each color for showing the flavor names e.g choco, vanilla, butterscotch, etc. */}
                   {Object.keys(variants).map((v) => (
                     <button
                       key={v}
