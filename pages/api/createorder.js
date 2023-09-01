@@ -2,6 +2,7 @@ import dbCon from "@/middlewares/dbCon";
 import Order from "@/models/Order";
 import Product from "@/models/Product";
 import Razorpay from "razorpay";
+import pincodes from "../../pincodes.json"
 
 const handler = async (req, res) => {
   if (req.method == "POST") {
@@ -10,22 +11,32 @@ const handler = async (req, res) => {
     let product;
     for(let i in products){
       product = await Product.findOne({ slug: i })
+
+      // * Pincode check
+      if(!Object.keys(pincodes).includes(pincode)){
+        console.log(pincode)
+        res.status(500).json({ success: false, error: "Sorry, We don't provide service in your area." })
+        return;
+      }
+
+      // * if amount = 0 then no transaction
+      if (amount === 0) {
+        res.status(403).json({ success: false, error: "Can't pay just Rs.0.00 Come on now" })
+        return;
+      }
       
-      // Review: if availableQty  is less than ordered qty
+      // * if availableQty  is less than ordered qty
       if (product.availableQty < products[i].qty) {
         res.status(500).json({ success: false, error: "Unavailable, try reducing the quantity." })
         return;
       }
 
-      // Review: tampering of cart items is getting checked
+      // * tampering of cart items is getting checked
       if (product.price != products[i].price) {
         res.status(403).json({ success: false, error: "Prices have been tampered with. Try again." })
         return;
       }
     }
-    
-    // Review: details validity
-
 
     const rzp = new Razorpay({
       key_id: process.env.RZP_KEY_ID,

@@ -12,7 +12,7 @@ const handler = async (req, res) => {
       const orders = await Order.find({ email: user?.email });
       res.status(200).json({ orders });
     } catch (error) {
-      res.status(500).json({ error });
+      res.status(500).json({ msg: "Try signing in again" });
     }
   } else res.status(400).json({ msg: "bad request" });
 };

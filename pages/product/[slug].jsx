@@ -8,8 +8,9 @@ import { useCart } from "@/context/useCart";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Tooltip } from "react-tooltip";
+import Error from "next/error";
 
-const Slug = ({ cart, addToCart, cake, variants, orderNow }) => {
+const Slug = ({ cart, addToCart, cake, variants, error, orderNow }) => {
   const { toggleCart } = useCart();
   const router = useRouter();
   const { slug } = router.query;
@@ -17,8 +18,8 @@ const Slug = ({ cart, addToCart, cake, variants, orderNow }) => {
   const [inService, setInService] = useState();
   const [inWishlist, setInWishlist] = useState(false);
   const [inCart, setInCart] = useState();
-  const [weight, setWeight] = useState(cake.weight);
-  const [flavor, setFlavor] = useState(cake.flavor);
+  const [weight, setWeight] = useState();
+  const [flavor, setFlavor] = useState();
   const colors = {
     butterscotch: "#E3963E",
     chocolate: "#7B3F00",
@@ -29,9 +30,11 @@ const Slug = ({ cart, addToCart, cake, variants, orderNow }) => {
   useEffect(() => {
     if (slug in cart) setInCart(true);
     else setInCart(false);
-    setFlavor(cake.flavor);
-    setWeight(cake.weight);
-  }, [cart, slug, cake.flavor, cake.weight]);
+    if (!error) {
+      setFlavor(cake.flavor);
+      setWeight(cake.weight);
+    }
+  }, [cart, slug, error]);
 
   const handleFlavorChange = (f) => {
     const url = `${BaseUrl}/product/${variants[f][0].slug}`;
@@ -86,6 +89,11 @@ const Slug = ({ cart, addToCart, cake, variants, orderNow }) => {
       setInService(null);
     }
   };
+
+  if (error === 404) {
+    return <Error statusCode={error} />
+  }
+
   return (
     <>
       <section className="text-gray-600 body-font overflow-hidden">
@@ -246,7 +254,7 @@ const Slug = ({ cart, addToCart, cake, variants, orderNow }) => {
                       }
                       className="rounded border appearance-none border-gray-300 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500 text-base pl-3 pr-10"
                     >
-                      {variants[flavor].map((w) => (
+                      {variants[flavor]?.map((w) => (
                         <option key={w.slug} value={w.slug}>
                           {w.weight}
                         </option>
@@ -267,7 +275,13 @@ const Slug = ({ cart, addToCart, cake, variants, orderNow }) => {
                     </span>
                   </div>
                 </div>
-              </div>
+              </div>              
+
+              {/* Stock Info */}
+              {cake.availableQty === 0 && (
+                <p className="text-rose-600 capitalize">Out of stock!</p>
+              )}
+
               {/* Buy */}
               <div className="md:flex lg:flex-col xl:flex-row space-y-3 md:space-y-0">
                 <span className="title-font flex items-center font-medium text-2xl lg:mr-3 text-gray-900">
@@ -286,7 +300,8 @@ const Slug = ({ cart, addToCart, cake, variants, orderNow }) => {
                         cake.category
                       )
                     }
-                    className="flex text-white bg-indigo-500 border-0 py-2 px-4 focus:outline-none hover:bg-indigo-600 rounded"
+                    className="flex text-white bg-indigo-500 border-0 py-2 px-4 focus:outline-none hover:bg-indigo-600 disabled:bg-indigo-300 rounded"
+                    disabled={cake.availableQty === 0}
                   >
                     Order Now
                   </button>
@@ -316,7 +331,8 @@ const Slug = ({ cart, addToCart, cake, variants, orderNow }) => {
                         toggleCart();
                       }
                     }}
-                    className="capitalize flex ml-auto md:ml-4 text-white bg-indigo-500 border-0 py-2 px-2 focus:outline-none hover:bg-indigo-600 rounded mr-auto"
+                    className="capitalize flex ml-auto md:ml-4 text-white bg-indigo-500 border-0 py-2 px-2 focus:outline-none hover:bg-indigo-600 disabled:bg-indigo-300 rounded mr-auto"
+                    disabled={cake.availableQty === 0}
                   >
                     {inCart ? "go to cart" : "add to cart"}
                     <FaShoppingCart size={23} className="ml-1" />
@@ -385,7 +401,7 @@ export async function getServerSideProps(context) {
     return { props: { cake: data.cake, variants: data.variants } };
   } catch (error) {
     console.log(error);
-    return { props: { cake: [] } };
+    return { props: { error: 404 } };
   }
 }
 

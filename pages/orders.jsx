@@ -4,15 +4,32 @@ import React, { useEffect, useState } from "react";
 import { BaseUrl } from "./_app";
 import { useRouter } from "next/router";
 import { FaRupeeSign } from "react-icons/fa";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Orders = () => {
   const router = useRouter();
   const [orders, setOrders] = useState([]);
   const fetchMyOrders = async () => {
-    const token = localStorage.getItem('token')
+    const token = localStorage.getItem("token");
     if (token) {
-      const {data: { orders }} = await axios.post(`${BaseUrl}/api/getmyorders`, { token });
-      setOrders(orders);
+      try {
+        const {
+          data: { orders },
+        } = await axios.post(`${BaseUrl}/api/getmyorders`, { token });
+        setOrders(orders);
+      } catch (error) {
+        toast.error(error.response.data.msg, {
+          position: "bottom-left",
+          autoClose: 6000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      }
     } else {
       router.push("/login");
     }
@@ -61,7 +78,10 @@ const Orders = () => {
                     {item.email}
                   </th>
                   <td className="px-6 py-4">{item.email}</td>
-                  <td className="px-6 py-4 flex items-center"><FaRupeeSign />{item.amount}.00</td>
+                  <td className="px-6 py-4 flex items-center">
+                    <FaRupeeSign />
+                    {item.amount}.00
+                  </td>
                   <td className="px-6 py-4">{item.status}</td>
                   <td className="px-6 py-4 text-right">
                     <Link
@@ -77,6 +97,18 @@ const Orders = () => {
           </table>
         </div>
       </div>
+      <ToastContainer
+        position="bottom-left"
+        autoClose={6000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
     </>
   );
 };

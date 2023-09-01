@@ -5,7 +5,6 @@ const handler = async (req, res) => {
   const data = await Product.find({ category: "cakes" });
   const cakes = {};
   for (let cake of data) {
-    console.log("cake: ", cake)
     const {
       title,
       desc,
@@ -19,19 +18,21 @@ const handler = async (req, res) => {
     } = cake;
     // the title becomes unique in the cakes object
     if (title in cakes) {
-        cakes[title].push({
-          slug,
-          desc,
-          img,
-          category,
-          flavor,
-          weight,
-          price,
-          availableQty,
-        });
-    //   }
+      cakes[title].push({
+        slug,
+        desc,
+        img,
+        category,
+        flavor,
+        weight,
+        price,
+        availableQty,
+      });
+      //   }
     } else {
-      cakes[title] = [{ slug, desc, img, category, flavor, weight, price, availableQty },]
+      cakes[title] = [
+        { slug, desc, img, category, flavor, weight, price, availableQty },
+      ];
     }
   }
 

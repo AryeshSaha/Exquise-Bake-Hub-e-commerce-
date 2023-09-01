@@ -111,6 +111,8 @@ const Checkout = ({
         products: cart,
         amount: subTotalAmt,
         address,
+        phone,
+        pincode,
       });
 
       if (!order) {
@@ -126,8 +128,6 @@ const Checkout = ({
         });
         return;
       }
-
-      console.log(order);
 
       const options = {
         key: process.env.RZP_KEY_ID,

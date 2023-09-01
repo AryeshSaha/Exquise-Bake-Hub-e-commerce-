@@ -1,11 +1,23 @@
 /* eslint-disable @next/next/no-img-element */
 import axios from "axios";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { BsCurrencyRupee, BsFillPrinterFill } from "react-icons/bs";
 import { BaseUrl } from "./_app";
 
 const Order = ({ order }) => {
-  const { amount, orderId, products, status } = order;
+  const { amount, orderId, products, status, createdAt } = order;
+  const [date, setDate] = useState();
+
+  useEffect(() => {
+    const d = new Date(createdAt);
+    const options = {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    };
+    setDate(d.toLocaleString("en-IN", options));
+  }, [createdAt]);
   return (
     <section className="text-gray-600 body-font overflow-hidden">
       <div className="container px-5 py-24 mx-auto">
@@ -17,9 +29,7 @@ const Order = ({ order }) => {
             <h1 className="text-gray-900 text-xl sm:text-2xl title-font font-medium mb-4">
               Order Id - {orderId}
             </h1>
-            <p className="leading-relaxed mb-4 capitalize">
-              order has been successfully placed.
-            </p>
+            <p className="leading-relaxed mb-4 capitalize font-medium">order placed on {date} successfully</p>
             <div className="flex mb-4">
               <h5 className="flex-grow text-left border-b-2 border-indigo-500 py-2 text-lg px-1">
                 Items
