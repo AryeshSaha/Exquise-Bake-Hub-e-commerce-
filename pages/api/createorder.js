@@ -3,6 +3,7 @@ import Order from "@/models/Order";
 import Product from "@/models/Product";
 import Razorpay from "razorpay";
 import pincodes from "../../pincodes.json"
+import Auth from "@/middlewares/auth";
 
 const handler = async (req, res) => {
   if (req.method == "POST") {
@@ -73,4 +74,4 @@ const handler = async (req, res) => {
   }
 };
 
-export default dbCon(handler);
+export default dbCon(Auth(handler));

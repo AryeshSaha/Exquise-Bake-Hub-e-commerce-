@@ -1,10 +1,11 @@
+import Auth from "@/middlewares/auth";
 import dbCon from "@/middlewares/dbCon";
 import Order from "@/models/Order";
 import User from "@/models/User";
 import jwt from "jsonwebtoken";
 
 const handler = async (req, res) => {
-  if (req.method == "POST") {
+  if (req.method == "GET") {
     const { token } = req.body;
     try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
@@ -16,4 +17,4 @@ const handler = async (req, res) => {
     }
   } else res.status(400).json({ msg: "bad request" });
 };
-export default dbCon(handler);
+export default dbCon(Auth(handler));

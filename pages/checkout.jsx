@@ -104,6 +104,12 @@ const Checkout = ({
     }
 
     try {
+      const token = localStorage.getItem("token");
+      const config = {
+        headers: {
+          Authorization: token,
+        },
+      };
       const {
         data: { order },
       } = await axios.post(`${BaseUrl}/api/createorder`, {
@@ -113,7 +119,7 @@ const Checkout = ({
         address,
         phone,
         pincode,
-      });
+      }, config);
 
       if (!order) {
         toast.error("Server Error. Make sure you're online", {

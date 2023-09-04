@@ -12,11 +12,16 @@ const Orders = () => {
   const [orders, setOrders] = useState([]);
   const fetchMyOrders = async () => {
     const token = localStorage.getItem("token");
+    const config = {
+      headers: {
+        Authorization: token,
+      },
+    };
     if (token) {
       try {
         const {
           data: { orders },
-        } = await axios.post(`${BaseUrl}/api/getmyorders`, { token });
+        } = await axios.get(`${BaseUrl}/api/getmyorders`, config);
         setOrders(orders);
       } catch (error) {
         toast.error(error.response.data.msg, {
