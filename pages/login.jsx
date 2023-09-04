@@ -7,8 +7,10 @@ import { BaseUrl } from "./_app";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/router";
+import { useAuth } from "@/context/useAuth";
 
-const Login = ({setUser}) => {
+const Login = () => {
+  const { setUser } = useAuth()
   const router = useRouter()
   const formik = useFormik({
     initialValues: {

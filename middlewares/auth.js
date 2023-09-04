@@ -13,7 +13,7 @@ const Auth = (handler) => async (req, res) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const user = await User.findById(decoded.id).select("-password")
     req.user = user; // Attach the decoded user data to the request object
-    return handler(req, res); // Continue to the next middleware or route handler
+    return handler(req, res);
   } catch (error) {
     return res.status(401).json({ message: "Invalid token" });
   }

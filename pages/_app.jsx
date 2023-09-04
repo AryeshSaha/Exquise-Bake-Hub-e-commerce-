@@ -2,16 +2,16 @@ import "@/styles/globals.css";
 import NavBar from "@/components/NavBar";
 import Footer from "@/components/Footer";
 import { useEffect, useState } from "react";
-import { CartProvider } from "@/context/useCart";
+import CartProvider from "@/context/useCart";
 import { useRouter } from "next/router";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import LoadingBar from "react-top-loading-bar";
+import AuthProvider from "@/context/useAuth";
 
 export const BaseUrl = "http://localhost:3000";
 
 export default function App({ Component, pageProps }) {
-  const [user, setUser] = useState(""); //token
   const [cart, setCart] = useState({}); //object of objects
   const [subTotalAmt, setSubTotalAmt] = useState(0.0);
   const [progress, setProgress] = useState(0);
@@ -24,9 +24,6 @@ export default function App({ Component, pageProps }) {
     router.events.on("routeChangeComplete", () => {
       setProgress(100);
     });
-
-    const localToken = localStorage.getItem("token");
-    if (user == "") setUser(localToken);
 
     const localCart = localStorage.getItem("cart");
     try {
@@ -52,6 +49,7 @@ export default function App({ Component, pageProps }) {
   };
 
   const orderNow = (itemCode, name, qty, price, flavor, weight, category) => {
+    const user = localStorage.getItem('token')
     if (!user)
       toast.error("Please Create an Account.", {
         position: "bottom-left",
@@ -75,6 +73,7 @@ export default function App({ Component, pageProps }) {
   };
 
   const addToCart = (itemCode, name, qty, price, flavor, weight, category) => {
+    const user = localStorage.getItem('token')
     if (!user)
       toast.error("Please Create an Account.", {
         position: "bottom-left",
@@ -142,48 +141,46 @@ export default function App({ Component, pageProps }) {
   };
   return (
     <>
-      <CartProvider>
-        <LoadingBar
-          color="#4b4dca"
-          progress={progress}
-          waitingTime={400}
-          height={3}
-          onLoaderFinished={() => setProgress(0)}
-        />
-        <ToastContainer
-          position="bottom-left"
-          autoClose={3000}
-          hideProgressBar={false}
-          newestOnTop
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="colored"
-        />
-        <NavBar
-          user={user}
-          setUser={setUser}
-          cart={cart}
-          addToCart={addToCart}
-          reduceFromCart={reduceFromCart}
-          clearCart={clearCart}
-          subTotalAmt={subTotalAmt}
-        />
-        <Component
-          user={user}
-          setUser={setUser}
-          cart={cart}
-          addToCart={addToCart}
-          reduceFromCart={reduceFromCart}
-          clearCart={clearCart}
-          orderNow={orderNow}
-          subTotalAmt={subTotalAmt}
-          {...pageProps}
-        />
-        <Footer />
-      </CartProvider>
+      <AuthProvider>
+        <CartProvider>
+          <LoadingBar
+            color="#4b4dca"
+            progress={progress}
+            waitingTime={400}
+            height={3}
+            onLoaderFinished={() => setProgress(0)}
+          />
+          <ToastContainer
+            position="bottom-left"
+            autoClose={3000}
+            hideProgressBar={false}
+            newestOnTop
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="colored"
+          />
+          <NavBar
+            cart={cart}
+            addToCart={addToCart}
+            reduceFromCart={reduceFromCart}
+            clearCart={clearCart}
+            subTotalAmt={subTotalAmt}
+          />
+          <Component
+            cart={cart}
+            addToCart={addToCart}
+            reduceFromCart={reduceFromCart}
+            clearCart={clearCart}
+            orderNow={orderNow}
+            subTotalAmt={subTotalAmt}
+            {...pageProps}
+          />
+          <Footer />
+        </CartProvider>
+      </AuthProvider>
     </>
   );
 }

@@ -3,7 +3,7 @@ import { createContext, useState, useContext } from 'react';
 
 const CartContext = createContext();
 
-export function CartProvider({ children }) {
+export default function CartProvider({ children }) {
   const [isCartOpen, setCartOpen] = useState(false);
 
   const toggleCart = () => {

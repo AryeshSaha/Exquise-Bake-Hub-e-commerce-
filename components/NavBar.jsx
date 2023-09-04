@@ -7,16 +7,16 @@ import CartContent from "./CartContent";
 import { useCart } from "@/context/useCart";
 import { Tooltip } from "react-tooltip";
 import { useRouter } from "next/router";
+import { useAuth } from "@/context/useAuth";
 
 const NavBar = ({
-  user,
-  setUser,
   cart,
   addToCart,
   reduceFromCart,
   clearCart,
   subTotalAmt,
 }) => {
+  const { user, setUser } = useAuth()
   const { isCartOpen, toggleCart } = useCart();
   const [dropdown, setDropdown] = useState(false);
   const [isBurger, setIsBurger] = useState(true);

@@ -1,16 +1,12 @@
 import Auth from "@/middlewares/auth";
 import dbCon from "@/middlewares/dbCon";
 import Order from "@/models/Order";
-import User from "@/models/User";
-import jwt from "jsonwebtoken";
 
 const handler = async (req, res) => {
   if (req.method == "GET") {
-    const { token } = req.body;
+    const { user } = req;
     try {
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      const user = await User.findById(decoded?.id);
-      const orders = await Order.find({ email: user?.email });
+      const orders = await Order.find({ email: user.email });
       res.status(200).json({ orders });
     } catch (error) {
       res.status(500).json({ msg: "Try signing in again" });
