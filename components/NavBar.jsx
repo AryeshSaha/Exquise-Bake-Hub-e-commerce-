@@ -16,7 +16,7 @@ const NavBar = ({
   clearCart,
   subTotalAmt,
 }) => {
-  const { user, setUser } = useAuth()
+  const { user, setUser } = useAuth();
   const { isCartOpen, toggleCart } = useCart();
   const [dropdown, setDropdown] = useState(false);
   const [isBurger, setIsBurger] = useState(true);
@@ -107,15 +107,26 @@ const NavBar = ({
               aria-labelledby="dropdownHoverButton"
             >
               {!user ? (
-                <li>
-                  <Link
-                    href="/login"
-                    onClick={() => setDropdown(false)}
-                    className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                  >
-                    Sign in
-                  </Link>
-                </li>
+                <>
+                  <li>
+                    <Link
+                      href="/login"
+                      onClick={() => setDropdown(false)}
+                      className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                    >
+                      Sign in
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/signup"
+                      onClick={() => setDropdown(false)}
+                      className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                    >
+                      Sign up
+                    </Link>
+                  </li>
+                </>
               ) : (
                 <>
                   <li>

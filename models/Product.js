@@ -1,5 +1,4 @@
-// TODO: Add sub-category for occassions and also rename this model as Products
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const ProductSchema = new mongoose.Schema(
   {
