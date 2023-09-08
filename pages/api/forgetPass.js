@@ -37,7 +37,7 @@ const handler = async (req, res) => {
       }, // sender address
       to: [`${email}`], // list of receivers
       subject: "Password Reset OTP", // Subject line
-      html: `<p>This is your 6 digit OTP to reset password, it will expire within 5 minutes</p><br><b style="font-size: 24px; color: #770077;">${OTP}</b>`, // html body
+      html: `<p>This is your 6 digit OTP to reset password, it will expire within 5 minutes</p><br><b style="font-size: 24px; color: #003477;">${OTP}</b>`, // html body
     });
     res.status(200).json({ message: "OTP sent successfully." });
   } catch (error) {

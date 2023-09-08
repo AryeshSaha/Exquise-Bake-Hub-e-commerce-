@@ -52,10 +52,9 @@ const Forgotpass = () => {
         },
         config
       );
-      console.log(data);
       if (data.expectedToken)
         router.push(
-          `${BaseUrl}/changePass?email=${email}&token=${data.expectedToken}`
+          `${BaseUrl}/changePass?token=${data.expectedToken}`
         );
     } catch (error) {
       console.log(error);

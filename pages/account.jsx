@@ -37,11 +37,11 @@ const Account = () => {
           theme: "colored",
         });
       } else {
-        setName(userDetails.name);
-        setEmail(userDetails.email);
-        setAddress(userDetails.address);
-        setPhone(userDetails.phone);
-        setPincode(userDetails.pincode);
+        if(userDetails.name) setName(userDetails.name);
+        if(userDetails.email) setEmail(userDetails.email);
+        if(userDetails.address) setAddress(userDetails.address);
+        if(userDetails.phone) setPhone(userDetails.phone);
+        if(userDetails.pincode) setPincode(userDetails.pincode);
       }
     }
   }, [loading, userDetails]);
@@ -280,8 +280,8 @@ const Account = () => {
               type="password"
               id="password"
               name="password"
-              onChange={handleChange}
               value={password}
+              onChange={handleChange}
               className="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
             />
           </div>
@@ -298,8 +298,8 @@ const Account = () => {
               type="password"
               id="npassword"
               name="npassword"
-              onChange={handleChange}
               value={nPassword}
+              onChange={handleChange}
               className="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
             />
           </div>
@@ -316,8 +316,8 @@ const Account = () => {
               type="password"
               id="cpassword"
               name="cpassword"
-              onChange={handleChange}
               value={cPassword}
+              onChange={handleChange}
               className="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
             />
           </div>

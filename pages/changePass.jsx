@@ -5,9 +5,8 @@ import React, { useState } from "react";
 import { BaseUrl } from "./_app";
 import Link from "next/link";
 
-const ChangePassword = () => {
+const ChangePassword = ({ email }) => {
   const router = useRouter();
-  const { email, token } = router.query;
   const [password, setPassword] = useState("");
   const [cPassword, setCPassword] = useState("");
 
@@ -29,15 +28,14 @@ const ChangePassword = () => {
           `${BaseUrl}/api/newPass`,
           {
             email,
-            token,
             password,
           },
           config
         );
-        console.log(data);
         if (data.message) router.push(`${BaseUrl}/login`);
       } catch (error) {
         console.log(error);
+        router.push(`${BaseUrl}/forgotpass`)
       }
     }
   };
@@ -115,6 +113,32 @@ const ChangePassword = () => {
       </div>
     </section>
   );
+};
+
+export const getServerSideProps = async (context) => {
+  const { token } = context.query;
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+      authorization: token,
+    },
+  };
+  try {
+    const { data: { email } } = await axios.get(`${BaseUrl}/api/getEmailFromToken`, config);
+
+    return {
+      props: {
+        email,
+      },
+    };
+  } catch (error) {
+    return {
+      redirect: {
+        destination: "/forgotpass",
+        permanent: false,
+      },
+    };
+  }
 };
 
 export default ChangePassword;

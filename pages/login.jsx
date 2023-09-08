@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
-import React from "react";
+import React, { useEffect } from "react";
 import { useFormik } from "formik";
 import axios from "axios";
 import { BaseUrl } from "./_app";
@@ -12,6 +12,23 @@ import { useAuth } from "@/context/useAuth";
 const Login = () => {
   const { setUser } = useAuth()
   const router = useRouter()
+  const message = router.query.message || '';
+
+  useEffect(() => {
+    if(message) {
+      toast.warning(message, {
+        position: "bottom-left",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    }
+  }, [message])
+
   const formik = useFormik({
     initialValues: {
       email: "",
