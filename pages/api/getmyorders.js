@@ -4,6 +4,7 @@ import Order from "@/models/Order";
 
 const handler = async (req, res) => {
   if (req.method == "GET") {
+    console.log("getmyorders api running")
     const { user } = req;
     try {
       const orders = await Order.find({ email: user.email });

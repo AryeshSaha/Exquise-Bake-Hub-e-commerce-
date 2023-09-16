@@ -25,7 +25,7 @@ export default function App({ Component, pageProps }) {
       setProgress(100);
     });
 
-    const token = localStorage.getItem("token");
+    // const token = localStorage.getItem("token");
     const localCart = localStorage.getItem("cart");
     try {
       if (localCart) {
@@ -35,7 +35,7 @@ export default function App({ Component, pageProps }) {
       // * Cart empty can't go to checkout page
       if (
         router.pathname === "/checkout" &&
-        (!token || Object.keys(JSON.parse(localCart)).length <= 0)
+        Object.keys(JSON.parse(localCart)).length <= 0
       ) {
         console.log("Cart is empty");
         toast.error("Can't checkout at the moment", {
@@ -77,8 +77,17 @@ export default function App({ Component, pageProps }) {
     setSubTotalAmt(total);
   };
 
-  const orderNow = (itemCode, name, qty, price, flavor, weight, category) => {
-    const user = localStorage.getItem("token");
+  const orderNow = (
+    user,
+    itemCode,
+    name,
+    qty,
+    price,
+    flavor,
+    weight,
+    category
+  ) => {
+    // const user = localStorage.getItem("token");
     if (!user)
       toast.error("Please Create an Account.", {
         position: "bottom-left",
@@ -101,8 +110,8 @@ export default function App({ Component, pageProps }) {
     }
   };
 
-  const addToCart = (itemCode, name, qty, price, flavor, weight, category) => {
-    const user = localStorage.getItem("token");
+  const addToCart = (user, itemCode, name, qty, price, flavor, weight, category) => {
+    // const user = localStorage.getItem("token");
     if (!user)
       toast.error("Please Create an Account.", {
         position: "bottom-left",

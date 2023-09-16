@@ -8,6 +8,8 @@ import { useCart } from "@/context/useCart";
 import { Tooltip } from "react-tooltip";
 import { useRouter } from "next/router";
 import { useAuth } from "@/context/useAuth";
+import axios from "axios";
+import { BaseUrl } from "@/pages/_app";
 
 const NavBar = ({
   cart,
@@ -27,9 +29,19 @@ const NavBar = ({
     setIsBurger(true);
   }, [router.query]);
 
-  const logoutHandler = () => {
+  const logoutHandler = async () => {
     localStorage.removeItem("token");
-    setUser("");
+    setUser(false);
+    try {
+      const {
+        data: { msg },
+      } = await axios.get(`${BaseUrl}/api/logout`, {
+        withCredentials: true,
+      });
+      console.log("Message: ", msg);
+    } catch (error) {
+      console.log(error.response.data.msg);
+    }
   };
 
   return (
@@ -140,7 +152,7 @@ const NavBar = ({
                   </li>
                   <li>
                     <Link
-                      href={`/orders?token=${user}`}
+                      href="/orders"
                       onClick={() => setDropdown(false)}
                       className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                     >

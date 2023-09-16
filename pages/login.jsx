@@ -10,12 +10,12 @@ import { useRouter } from "next/router";
 import { useAuth } from "@/context/useAuth";
 
 const Login = () => {
-  const { setUser } = useAuth()
-  const router = useRouter()
-  const message = router.query.message || '';
+  const { setUser } = useAuth();
+  const router = useRouter();
+  const message = router.query.message || "";
 
   useEffect(() => {
-    if(message) {
+    if (message) {
       toast.warning(message, {
         position: "bottom-left",
         autoClose: 3000,
@@ -27,7 +27,7 @@ const Login = () => {
         theme: "colored",
       });
     }
-  }, [message])
+  }, [message]);
 
   const formik = useFormik({
     initialValues: {
@@ -50,8 +50,8 @@ const Login = () => {
           },
           formConfig
         );
-        localStorage.setItem('token', data.token)
-        setUser(data.token)
+        // localStorage.setItem("token", data.token);
+        setUser(true);
         toast.success(data.msg, {
           position: "bottom-left",
           autoClose: 3000,
@@ -62,7 +62,7 @@ const Login = () => {
           progress: undefined,
           theme: "colored",
         });
-        router.push(`${BaseUrl}`)
+        router.push(`${BaseUrl}`);
       } catch (error) {
         toast.error(error.response.data.msg, {
           position: "bottom-left",
@@ -108,7 +108,10 @@ const Login = () => {
             <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
               Sign in to your account
             </h1>
-            <form className="space-y-4 md:space-y-6" onSubmit={formik.handleSubmit}>
+            <form
+              className="space-y-4 md:space-y-6"
+              onSubmit={formik.handleSubmit}
+            >
               <div>
                 <label
                   htmlFor="email"
@@ -194,6 +197,22 @@ const Login = () => {
       </div>
     </section>
   );
+};
+
+export const getServerSideProps = async (context) => {
+  const cookies = context.req.headers.cookie || "";
+  if (cookies === "") {
+    return {
+      props: {},
+    };
+  } else {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
 };
 
 export default Login;

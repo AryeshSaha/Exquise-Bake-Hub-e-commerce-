@@ -15,14 +15,14 @@ const Orders = ({ data }) => {
   return (
     <>
       <div className="container px-5 py-20 mx-auto min-h-screen">
-        {!orders && (
+        {Object.keys(orders).length <= 0 && (
           <>
             <h1 className="text-2xl font-semibold text-center capitalize p-8">
               No Orders Yet
             </h1>
           </>
         )}
-        {orders && (
+        {Object.keys(orders).length > 0 && (
           <>
             <h1 className="text-2xl font-semibold text-center capitalize p-8">
               my orders
@@ -100,12 +100,13 @@ const Orders = ({ data }) => {
 };
 
 export const getServerSideProps = async (context) => {
-  const { token } = context.query;
+  const cookies = context.req.headers.cookie || "";
+
   const config = {
     headers: {
-      "Content-Type": "application/json",
-      authorization: token,
+      Cookie: cookies,
     },
+    withCredentials: true,
   };
   try {
     const {

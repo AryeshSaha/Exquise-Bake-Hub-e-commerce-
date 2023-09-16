@@ -9,8 +9,10 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Tooltip } from "react-tooltip";
 import Error from "next/error";
+import { useAuth } from "@/context/useAuth";
 
 const Slug = ({ cart, addToCart, mousse, variants, error, orderNow }) => {
+  const { user } = useAuth()
   const { toggleCart } = useCart();
   const router = useRouter();
   const { slug } = router.query;
@@ -293,6 +295,7 @@ const Slug = ({ cart, addToCart, mousse, variants, error, orderNow }) => {
                   <button
                     onClick={() =>
                       orderNow(
+                        user,
                         slug,
                         mousse.title,
                         1,
@@ -311,6 +314,7 @@ const Slug = ({ cart, addToCart, mousse, variants, error, orderNow }) => {
                     onClick={() => {
                       if (!inCart) {
                         addToCart(
+                          user,
                           slug,
                           mousse.title,
                           1,
