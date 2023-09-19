@@ -7,6 +7,7 @@ import { BaseUrl } from "./_app";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/router";
+import { parse } from "cookie";
 
 const Signup = () => {
   const router = useRouter()
@@ -34,7 +35,6 @@ const Signup = () => {
             },
             formConfig
           );
-          localStorage.setItem('token', data.token)
           toast.success(data.msg, {
             position: "bottom-left",
             autoClose: 3000,
@@ -218,6 +218,22 @@ const Signup = () => {
       </div>
     </section>
   );
+};
+
+export const getServerSideProps = async (context) => {
+  const cookies = parse(context.req.headers.cookie || "");
+  if (cookies.jwt === null || cookies.jwt === undefined || !cookies.jwt) {
+    return {
+      props: {},
+    };
+  } else {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
 };
 
 export default Signup;

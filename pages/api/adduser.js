@@ -1,6 +1,7 @@
 import getToken from "@/jwt/getToken";
 import dbCon from "@/middlewares/dbCon";
 import User from "@/models/User";
+import { serialize } from "cookie";
 
 const handler = async (req, res) => {
   if (req.method != "POST") res.status(400).json({ msg: "bad request" });
@@ -16,7 +17,13 @@ const handler = async (req, res) => {
     const u = new User(req.body);
     await u.save();
     const token = getToken(u._id);
-    res.status(200).json({ msg: "Account Creation Successful", token });
+    const cookie = serialize("jwt", token, {
+      httpOnly: true,
+      maxAge: 10 * 60 * 60 * 1000, //10 hrs in millisecs
+      path: "/",
+    });
+    res.setHeader("Set-Cookie", cookie);
+    res.status(200).json({ msg: "Account Creation Successful" });
   } catch (error) {
     res.status(500).json({ msg: "Account Creation Unsuccessful", error });
   }

@@ -5,6 +5,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 const AuthContext = createContext();
 
 export default function AuthProvider({ children }) {
+  // logged in or not
   const [user, setUser] = useState(false);
   const [userDetails, setUserDetails] = useState();
   const [tokenExpired, setTokenExpired] = useState(true);
@@ -13,7 +14,7 @@ export default function AuthProvider({ children }) {
   useEffect(() => {
     tokenExpiry();
     console.log("useEffect from useAuth");
-  }, []);
+  }, [user]);
 
   // check token validity
   const tokenExpiry = async () => {
@@ -33,7 +34,7 @@ export default function AuthProvider({ children }) {
     } catch (error) {
       setTokenExpired(true);
       setLoading(false);
-      console.log(error.response.data.message);
+      console.log(error.response?.data.message);
     }
   };
 

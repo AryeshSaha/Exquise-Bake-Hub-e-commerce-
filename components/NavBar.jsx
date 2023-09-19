@@ -10,6 +10,8 @@ import { useRouter } from "next/router";
 import { useAuth } from "@/context/useAuth";
 import axios from "axios";
 import { BaseUrl } from "@/pages/_app";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const NavBar = ({
   cart,
@@ -30,8 +32,6 @@ const NavBar = ({
   }, [router.query]);
 
   const logoutHandler = async () => {
-    localStorage.removeItem("token");
-    setUser(false);
     try {
       const {
         data: { msg },
@@ -39,13 +39,26 @@ const NavBar = ({
         withCredentials: true,
       });
       console.log("Message: ", msg);
+      setUser(false);
+      router.push('/login')
     } catch (error) {
+      toast.error(error.response.data.msg, {
+        position: "bottom-left",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
       console.log(error.response.data.msg);
     }
   };
 
   return (
     <div className="bg-gray-200 text-gray-600 shadow-lg flex flex-wrap p-5 items-center sticky top-0 z-50 md:px-32">
+      <ToastContainer />
       {/* logo */}
       <div className="cursor-pointer flex title-font font-medium items-center text-gray-900 lg:mr-24 xl:mr-40 2xl:72">
         {/* burger menu button */}
@@ -160,8 +173,7 @@ const NavBar = ({
                     </Link>
                   </li>
                   <li>
-                    <Link
-                      href="/login"
+                    <div
                       onClick={() => {
                         logoutHandler();
                         setDropdown(false);
@@ -169,7 +181,7 @@ const NavBar = ({
                       className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                     >
                       Sign out
-                    </Link>
+                    </div>
                   </li>
                 </>
               )}

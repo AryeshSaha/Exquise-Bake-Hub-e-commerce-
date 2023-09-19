@@ -4,10 +4,10 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useAuth } from "@/context/useAuth";
 import { BaseUrl } from "./_app";
+import { parse } from "cookie";
 
 const Account = () => {
   const {
-    user,
     userDetails,
     setUserDetails,
     tokenExpired,
@@ -25,34 +25,26 @@ const Account = () => {
 
   useEffect(() => {
     if (!loading) {
-      // if (tokenExpired) {
-      //   toast.error("Please login again.", {
-      //     position: "bottom-center",
-      //     autoClose: 5000,
-      //     hideProgressBar: false,
-      //     closeOnClick: true,
-      //     pauseOnHover: true,
-      //     draggable: true,
-      //     progress: undefined,
-      //     theme: "colored",
-      //   });
-      // } else {
-        if(userDetails.name) setName(userDetails.name);
-        if(userDetails.email) setEmail(userDetails.email);
-        if(userDetails.address) setAddress(userDetails.address);
-        if(userDetails.phone) setPhone(userDetails.phone);
-        if(userDetails.pincode) setPincode(userDetails.pincode);
-      // }
+      if (tokenExpired) {
+        toast.error("Please login again.", {
+          position: "bottom-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      } else {
+        if (userDetails.name) setName(userDetails.name);
+        if (userDetails.email) setEmail(userDetails.email);
+        if (userDetails.address) setAddress(userDetails.address);
+        if (userDetails.phone) setPhone(userDetails.phone);
+        if (userDetails.pincode) setPincode(userDetails.pincode);
+      }
     }
   }, [loading, userDetails]);
-
-  // useEffect(() => {
-  //   if (user.name) setName(user.name);
-  //   if (user.email) setEmail(user.email);
-  //   if (user.address) setAddress(user.address);
-  //   if (user.phone) setPhone(user.phone);
-  //   if (user.pincode) setPincode(user.pincode);
-  // }, [user]);
 
   const handleChange = async (e) => {
     if (e.target.name == "name") setName(e.target.value);
@@ -105,73 +97,71 @@ const Account = () => {
     }
   };
 
-  // const updatePassword = async () => {
-  //   // TODO: check new and current passwords match or not
-  //   if (nPassword !== cPassword) {
-  //     toast.error("New and Confirm Passwords don't match.", {
-  //       position: "bottom-center",
-  //       autoClose: 5000,
-  //       hideProgressBar: false,
-  //       closeOnClick: true,
-  //       pauseOnHover: true,
-  //       draggable: true,
-  //       progress: undefined,
-  //       theme: "colored",
-  //     });
-  //     setNPassword("");
-  //     setCPassword("");
-  //   } else {
-  //     setLoading(true);
-  //     const config = {
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         Authorization: user,
-  //       },
-  //     };
+  const updatePassword = async () => {
+    if (nPassword !== cPassword) {
+      toast.error("New and Confirm Passwords don't match.", {
+        position: "bottom-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+      setNPassword("");
+      setCPassword("");
+    } else {
+      setLoading(true);
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      };
 
-  //     try {
-  //       const { data } = await axios.put(
-  //         `${BaseUrl}/api/updateUserPass`,
-  //         {
-  //           password,
-  //           nPassword,
-  //           cPassword,
-  //         },
-  //         config
-  //       );
+      try {
+        const { data } = await axios.put(
+          `${BaseUrl}/api/updateUserPass`,
+          {
+            password,
+            nPassword,
+            cPassword,
+          },
+          config
+        );
 
-  //       console.log("updated: ", data);
-  //       toast.success(data.message, {
-  //         position: "bottom-center",
-  //         autoClose: 5000,
-  //         hideProgressBar: false,
-  //         closeOnClick: true,
-  //         pauseOnHover: true,
-  //         draggable: true,
-  //         progress: undefined,
-  //         theme: "colored",
-  //       });
-  //       setLoading(false);
-  //     } catch (error) {
-  //       console.log(error);
-  //       toast.error(error.response.data.message, {
-  //         position: "bottom-center",
-  //         autoClose: 5000,
-  //         hideProgressBar: false,
-  //         closeOnClick: true,
-  //         pauseOnHover: true,
-  //         draggable: true,
-  //         progress: undefined,
-  //         theme: "colored",
-  //       });
-  //       setLoading(false);
-  //     }
-  //     setPassword("");
-  //     setNPassword("");
-  //     setCPassword("");
-  //   }
-  //   // TODO: call api to check if old password is correct and then update old password with the new one
-  // };
+        console.log("updated: ", data);
+        toast.success(data.message, {
+          position: "bottom-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+        setLoading(false);
+      } catch (error) {
+        console.log(error);
+        toast.error(error.response.data.message, {
+          position: "bottom-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+        setLoading(false);
+      }
+      setPassword("");
+      setNPassword("");
+      setCPassword("");
+    }
+  };
 
   return (
     <div className="container px-2 sm:m-auto">
@@ -334,7 +324,7 @@ const Account = () => {
       {/* Submit Button */}
       <div className="flex justify-end mt-8">
         <button
-          // onClick={updatePassword}
+          onClick={updatePassword}
           className="disabled:bg-indigo-200 flex justify-center items-center text-white bg-indigo-500 border-0 py-2 px-6 cursor-pointer focus:outline-none hover:bg-indigo-600 rounded text-lg"
         >
           Submit
@@ -347,8 +337,13 @@ const Account = () => {
 };
 
 export const getServerSideProps = async (context) => {
-  const cookies = context.req.headers.cookie || "";
-  if (cookies === "") {
+  const cookies = parse(context.req.headers.cookie || "");
+  if (
+    cookies.jwt === "" ||
+    cookies.jwt === null ||
+    cookies.jwt === undefined ||
+    !cookies.jwt
+  ) {
     return {
       redirect: {
         destination:
@@ -358,8 +353,8 @@ export const getServerSideProps = async (context) => {
     };
   } else {
     return {
-      props: {}
-    }
+      props: {},
+    };
   }
 };
 

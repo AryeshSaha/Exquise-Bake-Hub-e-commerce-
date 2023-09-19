@@ -8,6 +8,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/router";
 import { useAuth } from "@/context/useAuth";
+import { parse } from "cookie";
 
 const Login = () => {
   const { setUser } = useAuth();
@@ -50,7 +51,6 @@ const Login = () => {
           },
           formConfig
         );
-        // localStorage.setItem("token", data.token);
         setUser(true);
         toast.success(data.msg, {
           position: "bottom-left",
@@ -200,8 +200,8 @@ const Login = () => {
 };
 
 export const getServerSideProps = async (context) => {
-  const cookies = context.req.headers.cookie || "";
-  if (cookies === "") {
+  const cookies = parse(context.req.headers.cookie || "");
+  if (cookies.jwt === null || cookies.jwt === undefined || !cookies.jwt) {
     return {
       props: {},
     };

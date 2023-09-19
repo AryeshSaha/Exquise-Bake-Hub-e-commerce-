@@ -6,6 +6,7 @@ import { BaseUrl } from "./_app";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useAuth } from "@/context/useAuth";
+import { parse } from "cookie";
 
 const Checkout = ({ cart, subTotalAmt, addToCart, reduceFromCart }) => {
   const { loading, tokenExpired, userDetails } = useAuth();
@@ -109,17 +110,15 @@ const Checkout = ({ cart, subTotalAmt, addToCart, reduceFromCart }) => {
     }
 
     try {
-      const token = localStorage.getItem("token");
       const config = {
-        headers: {
-          Authorization: token,
-        },
+        withCredentials: true
       };
       const {
         data: { order },
       } = await axios.post(
         `${BaseUrl}/api/createorder`,
         {
+          name,
           email,
           products: cart,
           amount: subTotalAmt,
@@ -155,13 +154,12 @@ const Checkout = ({ cart, subTotalAmt, addToCart, reduceFromCart }) => {
         order_id: order.id,
         callback_url: `${BaseUrl}/api/paymentverification`,
         prefill: {
-          // Review: get user details and prefill them
-          name: "Gaurav Kumar",
-          email: "gaurav.kumar@example.com",
-          contact: "9000090000",
+          name: userDetails.name,
+          email: userDetails.email,
+          contact: userDetails.phone,
         },
         notes: {
-          address: "Razorpay Corporate Office",
+          address: "Exquise Bake Hub Address",
         },
         theme: {
           color: "#6366F1",
@@ -335,6 +333,28 @@ const Checkout = ({ cart, subTotalAmt, addToCart, reduceFromCart }) => {
       <ToastContainer rtl={false} pauseOnFocusLoss />
     </div>
   );
+};
+
+export const getServerSideProps = async (context) => {
+  const cookies = parse(context.req.headers.cookie || "");
+  if (
+    cookies.jwt === "" ||
+    cookies.jwt === null ||
+    cookies.jwt === undefined ||
+    !cookies.jwt
+  ) {
+    return {
+      redirect: {
+        destination:
+          "/login?message=Please%20log%20in%20to%20access%20this%20page",
+        permanent: false,
+      },
+    };
+  } else {
+    return {
+      props: {},
+    };
+  }
 };
 
 export default Checkout;

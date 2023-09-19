@@ -59,7 +59,7 @@ const Orders = ({ data }) => {
                         className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
                       >
                         {/* Review: Name should be here */}
-                        {item.email}
+                        {item.name}
                       </th>
                       <td className="px-6 py-4">{item.email}</td>
                       <td className="px-6 py-4 flex items-center">

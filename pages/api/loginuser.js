@@ -25,8 +25,7 @@ const handler = async (req, res) => {
       res
         .status(200)
         .json({
-          msg: "successful login",
-          token
+          msg: "successful login"
         });
     } else res.status(500).json({ msg: "Invalid Credentials" });
   } catch (error) {

@@ -60,7 +60,10 @@ const handler = async (req, res) => {
 
     // create a doc of the order and store it in the db collection
     const order1 = await Order.create({
+      name,
       email,
+      phone,
+      pincode,
       products,
       orderId: order.id,
       amount,
