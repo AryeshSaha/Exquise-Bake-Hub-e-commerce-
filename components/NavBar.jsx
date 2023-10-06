@@ -81,7 +81,7 @@ const NavBar = ({
       <nav
         className={`${
           isBurger ? "hidden" : "flex"
-        } flex-col absolute top-20 right-0 w-full bg-gray-800 shadow-xl rounded-lg space-y-3 py-4 transition-all duration-1000 ease-in-out lg:static lg:w-auto lg:bg-transparent lg:shadow-none lg:rounded-none lg:flex flex-wrap items-center text-base justify-center lg:flex-row lg:ml-auto lg:mr-auto lg:py-0 lg:space-y-0 lg:space-x-10`}
+        } flex-col absolute top-20 right-0 w-full bg-gray-800 shadow-xl space-y-3 py-4 transition-all duration-1000 ease-in-out lg:static lg:w-auto lg:bg-transparent lg:shadow-none lg:rounded-none lg:flex flex-wrap items-center text-base justify-center lg:flex-row lg:ml-auto lg:mr-auto lg:py-0 lg:space-y-0 lg:space-x-10`}
       >
         <Link
           href={"/"}
@@ -207,7 +207,7 @@ const NavBar = ({
       <section
         className={`absolute top-0 right-0 transform transition-transform ${
           isCartOpen ? "translate-x-0" : "translate-x-full"
-        } text-gray-600 body-font w-full md:w-auto md:min-w-[25rem] h-[100vh] overflow-y-scroll bg-indigo-100`}
+        } text-gray-600 body-font w-full md:w-auto md:min-w-[25rem] h-screen overflow-y-scroll bg-indigo-100`}
       >
         <CartContent
           cart={cart}
