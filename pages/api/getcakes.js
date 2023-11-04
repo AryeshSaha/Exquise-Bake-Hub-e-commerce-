@@ -9,6 +9,7 @@ const handler = async (req, res) => {
       const {
         title,
         desc,
+        previewImg,
         img,
         category,
         flavor,
@@ -22,6 +23,7 @@ const handler = async (req, res) => {
         cakes[title].push({
           slug,
           desc,
+          previewImg,
           img,
           category,
           flavor,
@@ -32,7 +34,17 @@ const handler = async (req, res) => {
         //   }
       } else {
         cakes[title] = [
-          { slug, desc, img, category, flavor, weight, price, availableQty },
+          {
+            slug,
+            desc,
+            previewImg,
+            img,
+            category,
+            flavor,
+            weight,
+            price,
+            availableQty,
+          },
         ];
       }
     }

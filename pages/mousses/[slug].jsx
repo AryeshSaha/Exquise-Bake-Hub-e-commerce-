@@ -100,9 +100,9 @@ const Slug = ({ cart, addToCart, mousse, variants, error, orderNow }) => {
 
   return (
     <>
-      <section className="text-gray-600 body-font overflow-hidden">
+      <section className="text-gray-600 body-font overflow-hidden min-h-screen">
         <ToastContainer newestOnTop rtl={false} pauseOnFocusLoss={false} />
-        <div className="container px-5 py-24 mx-auto">
+        <div className="container px-5 py-36 mx-auto">
           <div className="lg:w-4/5 mx-auto flex flex-wrap">
             <img
               alt="ecommerce"

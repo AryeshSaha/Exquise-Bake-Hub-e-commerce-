@@ -9,6 +9,7 @@ const handler = async (req, res) => {
       const {
         title,
         desc,
+        previewImg,
         img,
         category,
         flavor,
@@ -23,6 +24,7 @@ const handler = async (req, res) => {
         mousses[title].push({
           slug,
           desc,
+          previewImg,
           img,
           category,
           flavor,
@@ -33,7 +35,7 @@ const handler = async (req, res) => {
       } else {
         // If the title does not exist, create a new group and add the mousse as the main mousse
         mousses[title] = [
-          { slug, desc, img, category, flavor, weight, price, availableQty },
+          { slug, desc, previewImg, img, category, flavor, weight, price, availableQty },
         ];
       }
     }

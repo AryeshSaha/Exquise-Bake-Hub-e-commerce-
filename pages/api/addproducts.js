@@ -8,6 +8,7 @@ const handler = async (req, res) => {
                 let p = new Product({
                     title: req.body[i].title,
                     desc: req.body[i].desc,
+                    previewImg: req.body[i].previewImg,
                     img: req.body[i].img,
                     category: req.body[i].category,
                     flavor: req.body[i].flavor,
