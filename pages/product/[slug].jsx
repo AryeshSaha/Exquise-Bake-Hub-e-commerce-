@@ -104,7 +104,7 @@ const Slug = ({ cart, addToCart, cake, variants, error, orderNow }) => {
     <>
       <section className="text-gray-600 body-font overflow-hidden min-h-screen">
         <ToastContainer newestOnTop rtl={false} pauseOnFocusLoss={false} />
-        <div className="container px-5 py-36 mx-auto">
+        <div className="container px-5 py-16 md:py-36 mx-auto">
           <div className="lg:w-4/5 mx-auto flex flex-wrap">
             <img
               alt="ecommerce"
@@ -260,13 +260,14 @@ const Slug = ({ cart, addToCart, cake, variants, error, orderNow }) => {
                         toggleCart();
                       }
                     }}
-                    className="capitalize flex ml-auto md:ml-4 text-white bg-indigo-500 border-0 py-2 px-2 focus:outline-none hover:bg-indigo-600 disabled:bg-indigo-300 rounded mr-auto"
+                    className="capitalize flex ml-auto md:ml-4 text-white bg-indigo-500 border-0 py-2 px-2 focus:outline-none hover:bg-indigo-600 disabled:bg-indigo-300 rounded"
                     disabled={cake.availableQty === 0}
                   >
                     {inCart ? "go to cart" : "add to cart"}
                     <FaShoppingCart size={23} className="ml-1" />
                   </button>
-                  <button
+                  {/* Wishlist */}
+                  {/* <button
                     onClick={toggleAddToWishlist}
                     className="rounded-full mr-2 md:ml-2 w-10 h-10 bg-gray-200 hover:bg-indigo-600 p-0 border-0 inline-flex items-center justify-center text-gray-800 hover:text-gray-100"
                   >
@@ -283,7 +284,7 @@ const Slug = ({ cart, addToCart, cake, variants, error, orderNow }) => {
                         className={inWishlist ? "text-pink-600" : ""}
                       />
                     </svg>
-                  </button>
+                  </button> */}
                 </div>
               </div>
               <div className="mt-6">
