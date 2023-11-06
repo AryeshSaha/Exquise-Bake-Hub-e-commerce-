@@ -9,6 +9,7 @@ import { MdNavigateNext } from "react-icons/md";
 
 const Orders = ({ data }) => {
   const [orders, setOrders] = useState([]);
+  const { toggleDropDown } = useCart();
 
   useEffect(() => {
     console.log("orders: ", data);
@@ -27,7 +28,10 @@ const Orders = ({ data }) => {
   };
   return (
     <>
-      <div className="container px-5 md:py-20 mx-auto min-h-screen">
+      <div
+        className="container px-5 md:py-20 mx-auto min-h-screen"
+        onClick={() => toggleDropDown(false)}
+      >
         {Object.keys(orders).length <= 0 && (
           <>
             <h1 className="text-2xl font-semibold text-center capitalize p-8">
@@ -106,11 +110,17 @@ const Orders = ({ data }) => {
                       className="flex items-center justify-between py-4 px-6 active:text-indigo-600"
                     >
                       <div className="flex flex-col">
-                        <span className="font-medium text-gray-700">Placed on {dateMaker(order.updatedAt)}</span>
-                        <span className="text-base text-gray-700">For {order.name}</span>
-                        <span className="text-sm text-indigo-600">Status: {order.status}</span>
+                        <span className="font-medium text-gray-700">
+                          Placed on {dateMaker(order.updatedAt)}
+                        </span>
+                        <span className="text-base text-gray-700">
+                          For {order.name}
+                        </span>
+                        <span className="text-sm text-indigo-600">
+                          Status: {order.status}
+                        </span>
                       </div>
-                      <MdNavigateNext size={24}/>
+                      <MdNavigateNext size={24} />
                     </Link>
                   </li>
                 ))}

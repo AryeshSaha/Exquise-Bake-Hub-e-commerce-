@@ -9,6 +9,7 @@ import { useAuth } from "@/context/useAuth";
 import { parse } from "cookie";
 
 const Checkout = ({ cart, subTotalAmt, addToCart, reduceFromCart }) => {
+  const { toggleDropDown } = useCart();
   const { loading, tokenExpired, userDetails } = useAuth();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -111,7 +112,7 @@ const Checkout = ({ cart, subTotalAmt, addToCart, reduceFromCart }) => {
 
     try {
       const config = {
-        withCredentials: true
+        withCredentials: true,
       };
       const {
         data: { order },
@@ -182,7 +183,10 @@ const Checkout = ({ cart, subTotalAmt, addToCart, reduceFromCart }) => {
   };
 
   return (
-    <div className="container px-2 sm:m-auto">
+    <div
+      className="container px-2 sm:m-auto"
+      onClick={() => toggleDropDown(false)}
+    >
       <h1 className="font-bold text-3xl my-8 text-center">Checkout</h1>
       <h2 className="font-bold text-xl">1. Delivery Details</h2>
       {/* name and email */}

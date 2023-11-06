@@ -5,6 +5,7 @@ import { BsCurrencyRupee, BsFillPrinterFill } from "react-icons/bs";
 import { BaseUrl } from "./_app";
 
 const Order = ({ order }) => {
+  const { toggleDropDown } = useCart();
   const { amount, orderId, products, status, createdAt } = order;
   const [date, setDate] = useState();
 
@@ -19,7 +20,10 @@ const Order = ({ order }) => {
     setDate(d.toLocaleString("en-IN", options));
   }, [createdAt]);
   return (
-    <section className="text-gray-600 body-font overflow-hidden">
+    <section
+      className="text-gray-600 body-font overflow-hidden"
+      onClick={() => toggleDropDown(false)}
+    >
       <div className="container px-5 py-24 mx-auto">
         <div className="lg:w-4/5 mx-auto flex flex-wrap">
           <div className="lg:w-1/2 w-full lg:pr-10 lg:py-6 mb-6 lg:mb-0">
@@ -29,7 +33,9 @@ const Order = ({ order }) => {
             <h1 className="text-gray-900 text-xl sm:text-2xl title-font font-medium mb-4">
               Order Id - {orderId}
             </h1>
-            <p className="leading-relaxed mb-4 capitalize font-medium">order placed on {date} successfully</p>
+            <p className="leading-relaxed mb-4 capitalize font-medium">
+              order placed on {date} successfully
+            </p>
             <div className="flex mb-4">
               <h5 className="flex-grow text-left border-b-2 border-indigo-500 py-2 text-lg px-1">
                 Items

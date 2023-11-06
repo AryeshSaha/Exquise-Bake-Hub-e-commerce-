@@ -1,17 +1,22 @@
 // CartContext.js
-import { createContext, useState, useContext } from 'react';
+import { createContext, useState, useContext } from "react";
 
 const CartContext = createContext();
 
 export default function CartProvider({ children }) {
   const [isCartOpen, setCartOpen] = useState(false);
+  const [dropdown, setDropdown] = useState(false);
 
   const toggleCart = () => {
-    setCartOpen(prevState => !prevState);
+    setCartOpen((prevState) => !prevState);
+  };
+
+  const toggleDropDown = (instruction) => {
+    setDropdown(instruction);
   };
 
   return (
-    <CartContext.Provider value={{ isCartOpen, toggleCart }}>
+    <CartContext.Provider value={{ dropdown, toggleDropDown, isCartOpen, toggleCart }}>
       {children}
     </CartContext.Provider>
   );

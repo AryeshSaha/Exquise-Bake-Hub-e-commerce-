@@ -16,7 +16,7 @@ import Reviews from "@/components/Reviews";
 import ReviewInputs from "@/components/ReviewInputs";
 
 const Slug = ({ cart, addToCart, cake, variants, error, orderNow }) => {
-  const { toggleCart } = useCart();
+  const { toggleCart, toggleDropDown } = useCart();
   const { user } = useAuth();
   const router = useRouter();
   const { slug } = router.query;
@@ -102,7 +102,7 @@ const Slug = ({ cart, addToCart, cake, variants, error, orderNow }) => {
 
   return (
     <>
-      <section className="text-gray-600 body-font overflow-hidden min-h-screen">
+      <section className="text-gray-600 body-font overflow-hidden min-h-screen" onClick={()=> toggleDropDown(false)}>
         <ToastContainer newestOnTop rtl={false} pauseOnFocusLoss={false} />
         <div className="container px-5 py-16 md:py-36 mx-auto">
           <div className="lg:w-4/5 mx-auto flex flex-wrap">

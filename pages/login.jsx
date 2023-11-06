@@ -9,9 +9,11 @@ import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/router";
 import { useAuth } from "@/context/useAuth";
 import { parse } from "cookie";
+import { useCart } from "@/context/useCart";
 
 const Login = () => {
   const { setUser } = useAuth();
+  const { toggleDropDown } = useCart();
   const router = useRouter();
   const message = router.query.message || "";
 
@@ -78,7 +80,10 @@ const Login = () => {
     },
   });
   return (
-    <section className="bg-gray-50 dark:bg-gray-900">
+    <section
+      className="bg-gray-50 dark:bg-gray-900"
+      onClick={() => toggleDropDown(false)}
+    >
       <ToastContainer
         position="bottom-left"
         autoClose={3000}

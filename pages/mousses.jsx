@@ -5,11 +5,12 @@ import React, { useState } from "react";
 import { BaseUrl } from "./_app";
 
 const Mousses = ({ mousses }) => {
+  const { toggleDropDown } = useCart();
   const mousseKeys = Object.keys(mousses); // [array of keys from the mousses object]
   const [hoveredItem, setHoveredItem] = useState(null);
   return (
-    <div>
-      <section className="text-gray-600 body-font min-h-screen">
+    <>
+      <section className="text-gray-600 body-font min-h-screen" onClick={()=> toggleDropDown(false)}>
         <div className="container px-5 py-16 md:py-24 mx-auto">
           <div className="flex flex-wrap -m-4 justify-center">
             {mousseKeys.length == 0 && (
@@ -60,7 +61,7 @@ const Mousses = ({ mousses }) => {
           </div>
         </div>
       </section>
-    </div>
+    </>
   );
 };
 

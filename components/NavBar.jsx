@@ -21,13 +21,12 @@ const NavBar = ({
   subTotalAmt,
 }) => {
   const { user, setUser } = useAuth();
-  const { isCartOpen, toggleCart } = useCart();
-  const [dropdown, setDropdown] = useState(false);
+  const { isCartOpen, toggleCart, dropdown, toggleDropDown } = useCart();
   const [isBurger, setIsBurger] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
-    setDropdown(false);
+    toggleDropDown(false);
     setIsBurger(true);
   }, [router.query]);
 
@@ -66,7 +65,7 @@ const NavBar = ({
           <button
             className="border-none outline-none bg-transparent rounded-sm lg:hidden"
             onClick={() => {
-              setDropdown(false);
+              toggleDropDown(false);
               setIsBurger(!isBurger);
             }}
           >
@@ -82,7 +81,7 @@ const NavBar = ({
         <nav
           className={`${
             isBurger ? "hidden" : "flex"
-          } flex-col absolute top-20 right-0 w-full bg-gray-800 shadow-xl space-y-10 py-10 transform transition-transform duration-1000 ease-in-out lg:static lg:w-auto lg:bg-transparent lg:shadow-none lg:rounded-none lg:flex flex-wrap items-center text-xl justify-center lg:flex-row lg:ml-auto lg:mr-auto lg:py-0 lg:space-y-0 lg:space-x-10`}
+          } flex-col absolute top-20 right-0 w-full bg-gray-800 shadow-xl space-y-10 py-10 transform transition-transform duration-1000 ease-in-out lg:static lg:w-auto lg:bg-transparent lg:shadow-none lg:rounded-none lg:flex flex-wrap items-center text-xl md:text-base justify-center lg:flex-row lg:ml-auto lg:mr-auto lg:py-0 lg:space-y-0 lg:space-x-10`}
         >
           <Link
             href={"/"}
@@ -110,12 +109,12 @@ const NavBar = ({
           </Link>
         </nav>
         {/* account and cart btns */}
-        <div className="flex justify-end items-center w-auto ml-auto -mr-2 md:mr-0 md:space-x-1">
+        <div className="relative flex justify-end items-center w-auto ml-auto -mr-2 space-x-3 md:mr-0 md:space-x-1">
           <button
             id="dropdownHoverButton"
             onClick={() => {
               setIsBurger(true);
-              setDropdown(!dropdown);
+              toggleDropDown((prev) => !prev);
             }}
             className="inline-flex items-center border-0 p-2 -mr-3 md:mr-0 focus:outline-none hover:bg-gray-300 rounded-full text-base"
             data-tooltip-id="account"
@@ -126,72 +125,76 @@ const NavBar = ({
           </button>
           <Tooltip id="account" />
           {/* Dropdown menu */}
-          {dropdown && (
-            <div className="z-10 absolute top-16 right-0 text-center lg:text-left md:left-auto md:top-16 md:right-10 2xl:right-32 bg-white divide-y divide-gray-100 rounded-lg shadow w-52 dark:bg-gray-700">
-              <ul
-                className="py-2 text-sm text-gray-700 dark:text-gray-200"
-                aria-labelledby="dropdownHoverButton"
-              >
-                {!user ? (
-                  <>
-                    <li>
-                      <Link
-                        href="/login"
-                        onClick={() => setDropdown(false)}
-                        className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                      >
-                        Sign in
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        href="/signup"
-                        onClick={() => setDropdown(false)}
-                        className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                      >
-                        Sign up
-                      </Link>
-                    </li>
-                  </>
-                ) : (
-                  <>
-                    <li>
-                      <Link
-                        href="/account"
-                        onClick={() => setDropdown(false)}
-                        className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                      >
-                        Account
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        href="/orders"
-                        onClick={() => setDropdown(false)}
-                        className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                      >
-                        Orders
-                      </Link>
-                    </li>
-                    <li>
-                      <div
-                        onClick={() => {
-                          logoutHandler();
-                          setDropdown(false);
-                        }}
-                        className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                      >
-                        Sign out
-                      </div>
-                    </li>
-                  </>
-                )}
-              </ul>
-            </div>
-          )}
+          {/* {dropdown && ( */}
+          <div
+            className={`z-10 absolute ${
+              dropdown ? "translate-y-16" : "-translate-y-full"
+            } right-10 transform transition-transform duration-500 ease-in-out text-center lg:text-left text-xl md:text-base md:left-auto bg-white divide-y divide-gray-100 rounded-lg shadow w-52 dark:bg-gray-700`}
+          >
+            <ul
+              className="py-2 text-sm text-gray-700 dark:text-gray-200"
+              aria-labelledby="dropdownHoverButton"
+            >
+              {!user ? (
+                <>
+                  <li>
+                    <Link
+                      href="/login"
+                      onClick={() => toggleDropDown(false)}
+                      className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                    >
+                      Sign in
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/signup"
+                      onClick={() => toggleDropDown(false)}
+                      className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                    >
+                      Sign up
+                    </Link>
+                  </li>
+                </>
+              ) : (
+                <>
+                  <li>
+                    <Link
+                      href="/account"
+                      onClick={() => toggleDropDown(false)}
+                      className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                    >
+                      Account
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/orders"
+                      onClick={() => toggleDropDown(false)}
+                      className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                    >
+                      Orders
+                    </Link>
+                  </li>
+                  <li>
+                    <div
+                      onClick={() => {
+                        logoutHandler();
+                        toggleDropDown(false);
+                      }}
+                      className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                    >
+                      Sign out
+                    </div>
+                  </li>
+                </>
+              )}
+            </ul>
+          </div>
+          {/* )} */}
           <button
             onClick={() => {
-              setDropdown(false);
+              toggleDropDown(false);
               setIsBurger(true);
               toggleCart();
             }}

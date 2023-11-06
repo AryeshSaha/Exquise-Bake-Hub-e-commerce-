@@ -5,15 +5,12 @@ import "react-toastify/dist/ReactToastify.css";
 import { useAuth } from "@/context/useAuth";
 import { BaseUrl } from "./_app";
 import { parse } from "cookie";
+import { useCart } from "@/context/useCart";
 
 const Account = () => {
-  const {
-    userDetails,
-    setUserDetails,
-    tokenExpired,
-    loading,
-    setLoading,
-  } = useAuth();
+  const { userDetails, setUserDetails, tokenExpired, loading, setLoading } =
+    useAuth();
+  const { toggleDropDown } = useCart();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -164,7 +161,10 @@ const Account = () => {
   };
 
   return (
-    <div className="container px-2 sm:m-auto">
+    <div
+      className="container px-2 sm:m-auto"
+      onClick={() => toggleDropDown(false)}
+    >
       <h1 className="font-bold text-3xl my-8 text-center">Account</h1>
       <h2 className="font-bold text-xl">1. Delivery Details</h2>
       {/* name and email */}
