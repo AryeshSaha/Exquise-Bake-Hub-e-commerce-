@@ -106,7 +106,7 @@ const Slug = ({ cart, addToCart, mousse, variants, error, orderNow }) => {
     <>
       <section className="text-gray-600 body-font overflow-hidden min-h-screen" onClick={()=> toggleDropDown(false)}>
         <ToastContainer newestOnTop rtl={false} pauseOnFocusLoss={false} />
-        <div className="container px-5 py-16 md:py-36 mx-auto">
+        <div className="container px-5 py-16 md:py-44 mx-auto">
           <div className="lg:w-4/5 mx-auto flex flex-wrap">
             <img
               alt="ecommerce"

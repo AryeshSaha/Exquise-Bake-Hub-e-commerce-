@@ -1,174 +1,136 @@
-import { BsStarFill } from "react-icons/bs";
+import { useAuth } from "@/context/useAuth";
+import { BsFillTrashFill, BsStarFill } from "react-icons/bs";
+import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { BaseUrl } from "@/pages/_app";
+import { useAtom } from "jotai";
+import { reviewsAtom } from "@/global/Atoms";
+import { useEffect } from "react";
 
 /* eslint-disable @next/next/no-img-element */
-const Reviews = () => {
+const Reviews = ({ reviews }) => {
+  const { userDetails } = useAuth();
+  const [feedbacks, setFeedbacks] = useAtom(reviewsAtom);
+
+  useEffect(() => {
+    setFeedbacks(reviews);
+  }, [reviews, setFeedbacks]);
+  const handleDelete = async (id) => {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    };
+    try {
+      const { data } = await axios.delete(
+        `${BaseUrl}/api/deleteReview?id=${id}`,
+        config
+      );
+      if (data.msg) {
+        toast.success(data.msg, {
+          position: "bottom-left",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      }
+      const updatedReviewsArr = feedbacks.filter((review) => review._id !== id);
+      setFeedbacks(updatedReviewsArr);
+    } catch (error) {
+      console.log(error);
+      toast.error("Sorry, something went wrong", {
+        position: "bottom-left",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    }
+  };
   return (
     <>
-      <h2 className="text-left font-semibold text-3xl text-gray-600 mb-4">Reviews(4)</h2>
-      <article>
-        <div className="flex items-center mb-4 space-x-4">
-          <img
-            className="w-10 h-10 rounded-full"
-            src="/cake.jpg"
-            alt="profile_pic"
-          />
-          <div className="space-y-1 font-medium">
-            <p>
-              Jese Leos
-              <span className="block text-sm text-gray-500">
-                Verified buyer
-              </span>
-            </p>
-          </div>
-        </div>
-        <div className="flex items-center mb-1 space-x-0.5">
-          <BsStarFill className="text-yellow-500" />
-          <BsStarFill className="text-yellow-500" />
-          <BsStarFill className="text-yellow-500" />
-          <BsStarFill className="text-yellow-500" />
-          <BsStarFill className="text-gray-400" />
-        </div>
-        <footer className="mb-5 text-sm text-gray-500">
-          <p>
-            Reviewed in the United Kingdom on
-            <time dateTime="2017-03-03 19:00">March 3, 2017</time>
-          </p>
-        </footer>
-        <p className="mb-2 text-gray-500">
-          This is my third Invicta Pro Diver. They are just fantastic value for
-          money. This one arrived yesterday and the first thing I did was set
-          the time, popped on an identical strap from another Invicta and went
-          in the shower with it to test the waterproofing.... No problems.
-        </p>
-        <p className="mb-3 text-gray-500 ">
-          It is obviously not the same build quality as those very expensive
-          watches. But that is like comparing a Citroën to a Ferrari. This watch
-          was well under £100! An absolute bargain.
-        </p>
-      </article>
-      <article>
-        <div className="flex items-center mb-4 space-x-4">
-          <img
-            className="w-10 h-10 rounded-full"
-            src="/cake.jpg"
-            alt="profile_pic"
-          />
-          <div className="space-y-1 font-medium">
-            <p>
-              Jese Leos
-              <span className="block text-sm text-gray-500">
-                Verified buyer
-              </span>
-            </p>
-          </div>
-        </div>
-        <div className="flex items-center mb-1 space-x-0.5">
-          <BsStarFill className="text-yellow-500" />
-          <BsStarFill className="text-yellow-500" />
-          <BsStarFill className="text-yellow-500" />
-          <BsStarFill className="text-yellow-500" />
-          <BsStarFill className="text-gray-400" />
-        </div>
-        <footer className="mb-5 text-sm text-gray-500">
-          <p>
-            Reviewed in the United Kingdom on
-            <time dateTime="2017-03-03 19:00">March 3, 2017</time>
-          </p>
-        </footer>
-        <p className="mb-2 text-gray-500">
-          This is my third Invicta Pro Diver. They are just fantastic value for
-          money. This one arrived yesterday and the first thing I did was set
-          the time, popped on an identical strap from another Invicta and went
-          in the shower with it to test the waterproofing.... No problems.
-        </p>
-        <p className="mb-3 text-gray-500 ">
-          It is obviously not the same build quality as those very expensive
-          watches. But that is like comparing a Citroën to a Ferrari. This watch
-          was well under £100! An absolute bargain.
-        </p>
-      </article>
-      <article>
-        <div className="flex items-center mb-4 space-x-4">
-          <img
-            className="w-10 h-10 rounded-full"
-            src="/cake.jpg"
-            alt="profile_pic"
-          />
-          <div className="space-y-1 font-medium">
-            <p>
-              Jese Leos
-              <span className="block text-sm text-gray-500">
-                Verified buyer
-              </span>
-            </p>
-          </div>
-        </div>
-        <div className="flex items-center mb-1 space-x-0.5">
-          <BsStarFill className="text-yellow-500" />
-          <BsStarFill className="text-yellow-500" />
-          <BsStarFill className="text-yellow-500" />
-          <BsStarFill className="text-yellow-500" />
-          <BsStarFill className="text-gray-400" />
-        </div>
-        <footer className="mb-5 text-sm text-gray-500">
-          <p>
-            Reviewed in the United Kingdom on
-            <time dateTime="2017-03-03 19:00">March 3, 2017</time>
-          </p>
-        </footer>
-        <p className="mb-2 text-gray-500">
-          This is my third Invicta Pro Diver. They are just fantastic value for
-          money. This one arrived yesterday and the first thing I did was set
-          the time, popped on an identical strap from another Invicta and went
-          in the shower with it to test the waterproofing.... No problems.
-        </p>
-        <p className="mb-3 text-gray-500 ">
-          It is obviously not the same build quality as those very expensive
-          watches. But that is like comparing a Citroën to a Ferrari. This watch
-          was well under £100! An absolute bargain.
-        </p>
-      </article>
-      <article>
-        <div className="flex items-center mb-4 space-x-4">
-          <img
-            className="w-10 h-10 rounded-full"
-            src="/cake.jpg"
-            alt="profile_pic"
-          />
-          <div className="space-y-1 font-medium">
-            <p>
-              Jese Leos
-              <span className="block text-sm text-gray-500">
-                Verified buyer
-              </span>
-            </p>
-          </div>
-        </div>
-        <div className="flex items-center mb-1 space-x-0.5">
-          <BsStarFill className="text-yellow-500" />
-          <BsStarFill className="text-yellow-500" />
-          <BsStarFill className="text-yellow-500" />
-          <BsStarFill className="text-yellow-500" />
-          <BsStarFill className="text-gray-400" />
-        </div>
-        <footer className="mb-5 text-sm text-gray-500">
-          <p>
-            Reviewed in the United Kingdom on
-            <time dateTime="2017-03-03 19:00">March 3, 2017</time>
-          </p>
-        </footer>
-        <p className="mb-2 text-gray-500">
-          This is my third Invicta Pro Diver. They are just fantastic value for
-          money. This one arrived yesterday and the first thing I did was set
-          the time, popped on an identical strap from another Invicta and went
-          in the shower with it to test the waterproofing.... No problems.
-        </p>
-        <p className="mb-3 text-gray-500 ">
-          It is obviously not the same build quality as those very expensive
-          watches. But that is like comparing a Citroën to a Ferrari. This watch
-          was well under £100! An absolute bargain.
-        </p>
-      </article>
+      <h2 className="text-left font-semibold text-3xl text-gray-600 mb-4">
+        Reviews({feedbacks.length})
+      </h2>
+      <ToastContainer
+        position="bottom-left"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
+      {feedbacks.length == 0 && (
+        <h2 className="text-left font-semibold text-3xl text-gray-600 mb-4">
+          be the first one to review
+        </h2>
+      )}
+      {feedbacks.length > 0 &&
+        feedbacks.map((review) => (
+          <article key={review._id}>
+            <div className="flex items-start justify-between w-full md:w-1/2 bg-indigo-100 rounded-md my-4 p-4">
+              <div className="flex flex-col">
+                <div className="flex items-center mb-4 space-x-4">
+                  <img
+                    className="w-10 h-10 rounded-full"
+                    src="/cake.jpg"
+                    alt="profile_pic"
+                  />
+                  <div className="space-y-1 font-medium">
+                    <p>
+                      {review.author.name}
+                      <span className="block text-sm text-gray-500">
+                        Verified buyer
+                      </span>
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center mb-1 space-x-0.5">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <BsStarFill
+                      key={star}
+                      className={
+                        star <= review.rating
+                          ? "text-yellow-500"
+                          : "text-gray-400"
+                      }
+                    />
+                  ))}
+                </div>
+                <footer className="mb-5 text-sm text-gray-500">
+                  <div className="flex space-x-1">
+                    <p>Reviewed in India on</p>
+                    <div className="text-gray-600">
+                      {new Date(review.createdAt).toLocaleDateString()}
+                    </div>
+                  </div>
+                </footer>
+                <p className="mb-3 text-gray-500 ">{review.review}</p>
+              </div>
+              {userDetails?.email === review.author.email && (
+                <div
+                  onClick={() => handleDelete(review._id)}
+                  className="flex cursor-pointer"
+                >
+                  <BsFillTrashFill className="text-xl text-rose-900" />
+                </div>
+              )}
+            </div>
+          </article>
+        ))}
     </>
   );
 };

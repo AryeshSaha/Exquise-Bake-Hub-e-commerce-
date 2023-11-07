@@ -13,7 +13,7 @@ const StarRating = ({ rating, onRatingChange }) => {
       {[1, 2, 3, 4, 5].map((star) => (
         <BsStarFill
           key={star}
-          className={star <= (hoverRating || rating) ? 'text-indigo-600' : 'text-gray-300'}
+          className={`${star <= (hoverRating || rating) ? 'text-indigo-600' : 'text-gray-300'} cursor-pointer`}
           size={30}
           onMouseEnter={() => setHoverRating(star)}
           onMouseLeave={() => setHoverRating(0)}

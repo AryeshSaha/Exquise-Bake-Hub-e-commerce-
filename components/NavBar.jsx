@@ -128,7 +128,7 @@ const NavBar = ({
           {/* {dropdown && ( */}
           <div
             className={`z-10 absolute ${
-              dropdown ? "translate-y-16" : "-translate-y-full"
+              dropdown ? user ? "translate-y-20" : "translate-y-16" : "-translate-y-full"
             } right-10 transform transition-transform duration-500 ease-in-out text-center lg:text-left text-xl md:text-base md:left-auto bg-white divide-y divide-gray-100 rounded-lg shadow w-52 dark:bg-gray-700`}
           >
             <ul

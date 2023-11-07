@@ -8,9 +8,13 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/router";
 import { parse } from "cookie";
+import { useAuth } from "@/context/useAuth";
+import { useCart } from "@/context/useCart";
 
 const Signup = () => {
-  const router = useRouter()
+  const { setUser } = useAuth();
+  const { toggleDropDown } = useCart();
+  const router = useRouter();
   const formik = useFormik({
     initialValues: {
       name: "",
@@ -35,6 +39,7 @@ const Signup = () => {
             },
             formConfig
           );
+          setUser(true);
           toast.success(data.msg, {
             position: "bottom-left",
             autoClose: 3000,
@@ -45,7 +50,7 @@ const Signup = () => {
             progress: undefined,
             theme: "colored",
           });
-          router.push(`${BaseUrl}`)
+          router.push(`${BaseUrl}`);
         } catch (error) {
           toast.error(error.response.data.msg, {
             position: "bottom-left",
@@ -58,11 +63,24 @@ const Signup = () => {
             theme: "colored",
           });
         }
-      } else alert("Please enter the same passwords");
+      } else
+        toast.error("Please enter the same passwords", {
+          position: "bottom-left",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
     },
   });
   return (
-    <section className="bg-gray-50 dark:bg-gray-900">
+    <section
+      className="bg-gray-50 dark:bg-gray-900"
+      onClick={() => toggleDropDown(false)}
+    >
       <ToastContainer
         position="bottom-left"
         autoClose={3000}

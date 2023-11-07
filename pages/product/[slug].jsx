@@ -15,7 +15,7 @@ import { Element, Link } from "react-scroll";
 import Reviews from "@/components/Reviews";
 import ReviewInputs from "@/components/ReviewInputs";
 
-const Slug = ({ cart, addToCart, cake, variants, error, orderNow }) => {
+const Slug = ({ cart, addToCart, cake, variants, reviews, error, orderNow }) => {
   const { toggleCart, toggleDropDown } = useCart();
   const { user } = useAuth();
   const router = useRouter();
@@ -102,9 +102,12 @@ const Slug = ({ cart, addToCart, cake, variants, error, orderNow }) => {
 
   return (
     <>
-      <section className="text-gray-600 body-font overflow-hidden min-h-screen" onClick={()=> toggleDropDown(false)}>
+      <section
+        className="text-gray-600 body-font overflow-hidden min-h-screen"
+        onClick={() => toggleDropDown(false)}
+      >
         <ToastContainer newestOnTop rtl={false} pauseOnFocusLoss={false} />
-        <div className="container px-5 py-16 md:py-36 mx-auto">
+        <div className="container px-5 py-16 md:py-44 mx-auto">
           <div className="lg:w-4/5 mx-auto flex flex-wrap">
             <img
               alt="ecommerce"
@@ -129,7 +132,7 @@ const Slug = ({ cart, addToCart, cake, variants, error, orderNow }) => {
                   <BsStar className="w-4 h-4 text-indigo-600" />
                   <span className="text-gray-600 ml-3 hover:text-red-600 cursor-pointer">
                     <Link to="reviews" smooth={true} duration={500}>
-                      4 Reviews
+                      {reviews.length} Reviews
                     </Link>
                   </span>
                   /
@@ -319,10 +322,10 @@ const Slug = ({ cart, addToCart, cake, variants, error, orderNow }) => {
       <section className="h-auto">
         <div className="container mx-auto px-5 py-8 flex flex-col justify-center items-center mb-10">
           <Element name="reviews" className="w-full mb-10">
-            <Reviews />
+            <Reviews reviews={reviews} />
           </Element>
           <Element name="give_review" className="w-full">
-            <ReviewInputs />
+            <ReviewInputs cake={cake} />
           </Element>
         </div>
       </section>
@@ -337,8 +340,13 @@ export async function getServerSideProps(context) {
     const { data } = await axios.post(`${BaseUrl}/api/getslug`, {
       slug: context.query.slug,
     });
+    const {
+      data: { reviews },
+    } = await axios.post(`${BaseUrl}/api/reviews`, {
+      title: data.cake.title,
+    });
     // Passing data to the page via props
-    return { props: { cake: data.cake, variants: data.variants } };
+    return { props: { cake: data.cake, variants: data.variants, reviews } };
   } catch (error) {
     console.log(error);
     return { props: { error: 404 } };

@@ -22,7 +22,6 @@ const ProductSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    // * different flavor of each Product for variants
     flavor: String,
     weight: Number,
     slug: {
@@ -38,6 +37,7 @@ const ProductSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    feedbacks: [{ type: mongoose.Schema.Types.ObjectId, ref: "Review" }],
   },
   {
     timestamps: true,
@@ -45,7 +45,7 @@ const ProductSchema = new mongoose.Schema(
     toObject: { virtuals: true },
   }
 );
-mongoose.models = {}
+mongoose.models = {};
 const Product = mongoose.model("Product", ProductSchema);
 
 export default Product;

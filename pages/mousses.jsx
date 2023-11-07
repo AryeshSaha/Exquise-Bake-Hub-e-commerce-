@@ -3,6 +3,7 @@ import axios from "axios";
 import Link from "next/link";
 import React, { useState } from "react";
 import { BaseUrl } from "./_app";
+import { useCart } from "@/context/useCart";
 
 const Mousses = ({ mousses }) => {
   const { toggleDropDown } = useCart();
