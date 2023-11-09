@@ -9,8 +9,8 @@ import "react-toastify/dist/ReactToastify.css";
 import LoadingBar from "react-top-loading-bar";
 import AuthProvider from "@/context/useAuth";
 
-export const BaseUrl = "http://localhost:3000";
-// export const BaseUrl = "https://exquise-bake-hub.vercel.app";
+// export const BaseUrl = "http://localhost:3000";
+export const BaseUrl = "https://exquise-bake-hub.vercel.app";
 
 export default function App({ Component, pageProps }) {
   const [cart, setCart] = useState({}); //object of objects
