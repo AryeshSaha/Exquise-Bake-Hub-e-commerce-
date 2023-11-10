@@ -21,9 +21,9 @@ const useAuth = () => {
         setLoading(false);
       }
     } catch (error) {
-      await axios.get(`${BaseUrl}/api/sessionexpire`, {
-        withCredentials: true,
-      });
+      // await axios.get(`${BaseUrl}/api/sessionexpire`, {
+      //   withCredentials: true,
+      // });
       setUser(false);
       setLoading(false);
       console.log("from token expiry: ", error.response?.data.message);
