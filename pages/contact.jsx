@@ -1,8 +1,9 @@
-import { useCart } from "@/context/useCart";
+import { dropdownAtom } from "@/global/Atoms";
+import { useAtom } from "jotai";
 import React from "react";
 
 const Contact = () => {
-  const { toggleDropDown } = useCart();
+  const [ , toggleDropDown ] = useAtom(dropdownAtom);
   return (
     <section
       className="text-gray-600 body-font relative"
