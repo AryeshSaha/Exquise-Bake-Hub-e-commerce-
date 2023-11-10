@@ -14,10 +14,8 @@ import ReviewInputs from "@/components/ReviewInputs";
 import { useAtom } from "jotai";
 import { BaseUrl, cartSidebarAtom, dropdownAtom } from "@/global/Atoms";
 import useCart from "@/hooks/useCart";
-import useAuth from "@/hooks/useAuth";
 
 const Slug = ({ mousse, variants, reviews, error }) => {
-  const { user } = useAuth();
   const { cart, addToCart, orderNow } = useCart();
   const [isCartOpen, toggleCart] = useAtom(cartSidebarAtom);
   const [, toggleDropDown] = useAtom(dropdownAtom);
@@ -226,7 +224,6 @@ const Slug = ({ mousse, variants, reviews, error }) => {
                   <button
                     onClick={() =>
                       orderNow(
-                        user,
                         slug,
                         mousse.title,
                         1,
@@ -245,7 +242,6 @@ const Slug = ({ mousse, variants, reviews, error }) => {
                     onClick={() => {
                       if (!inCart) {
                         addToCart(
-                          user,
                           slug,
                           mousse.title,
                           1,

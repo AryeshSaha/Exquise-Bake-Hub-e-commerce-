@@ -13,14 +13,12 @@ import Reviews from "@/components/Reviews";
 import ReviewInputs from "@/components/ReviewInputs";
 import { useAtom } from "jotai";
 import { BaseUrl, cartSidebarAtom, dropdownAtom } from "@/global/Atoms";
-import useAuth from "@/hooks/useAuth";
 import useCart from "@/hooks/useCart";
 
 const Slug = ({ cake, variants, reviews, error }) => {
   const { cart, addToCart, orderNow } = useCart();
-  const [isCartOpen, setIsCartOpen] = useAtom(cartSidebarAtom)
-  const [, setDropdown] = useAtom(dropdownAtom)
-  const { user } = useAuth();
+  const [isCartOpen, setIsCartOpen] = useAtom(cartSidebarAtom);
+  const [, setDropdown] = useAtom(dropdownAtom);
   const router = useRouter();
   const { slug } = router.query;
   const [pin, setPin] = useState();
