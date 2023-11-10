@@ -1,16 +1,16 @@
-import { useAuth } from "@/context/useAuth";
+// import { useAuth } from "@/context/useAuth";
 import { BsFillTrashFill, BsStarFill } from "react-icons/bs";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { BaseUrl } from "@/pages/_app";
 import { useAtom } from "jotai";
-import { reviewsAtom } from "@/global/Atoms";
+import { BaseUrl, reviewsAtom } from "@/global/Atoms";
 import { useEffect } from "react";
+import useAuth from "@/hooks/useAuth";
 
 /* eslint-disable @next/next/no-img-element */
 const Reviews = ({ reviews }) => {
-  const { userDetails } = useAuth();
+  const { userDetails, setUser } = useAuth();
   const [feedbacks, setFeedbacks] = useAtom(reviewsAtom);
 
   useEffect(() => {
@@ -44,16 +44,30 @@ const Reviews = ({ reviews }) => {
       setFeedbacks(updatedReviewsArr);
     } catch (error) {
       console.log(error);
-      toast.error("Sorry, something went wrong", {
-        position: "bottom-left",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-      });
+      if (error.response.status == 401) {
+        setUser(false);
+        toast.error("Please login again.", {
+          position: "bottom-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      } else {
+        toast.error("Sorry, something went wrong", {
+          position: "bottom-left",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      }
     }
   };
   return (

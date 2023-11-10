@@ -2,12 +2,13 @@ import { Inter } from "next/font/google";
 import Head from "next/head";
 import Image from "next/image";
 import HomeContent from "@/components/HomeContent";
-import { useCart } from "@/context/useCart";
+import { useAtom } from "jotai";
+import { dropdownAtom } from "@/global/Atoms";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
-  const { toggleDropDown } = useCart();
+  const [, setDropdown]  = useAtom(dropdownAtom);
   return (
     <>
       <Head>
@@ -23,7 +24,8 @@ export default function Home() {
         alt="bg wallpaper"
         width={1920}
         height={720}
-        onClick={() => toggleDropDown(false)}
+        onClick={() => setDropdown(false)}
+        priority={true}
       />
       <HomeContent />
     </>

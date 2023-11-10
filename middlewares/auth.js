@@ -6,16 +6,15 @@ const Auth = (handler) => async (req, res) => {
   console.log("Auth o cholche");
   
   if (!req.headers.cookie) {
-    return res.status(401).json({ success: false, message: "Authentication token is missing" });
+    return res.status(403).json({ success: false, message: "Authentication token is missing" });
   }
   
   // Extract the token
-  // const token = req.headers.authorization; 
   const cookie = parse(req.headers.cookie);
   const token = cookie.jwt
 
   if (!token) {
-    return res.status(401).json({ success: false, message: "Authentication token is missing" });
+    return res.status(403).json({ success: false, message: "Authentication token is missing" });
   }
 
   try {
@@ -26,8 +25,8 @@ const Auth = (handler) => async (req, res) => {
     req.success = true; // Attach the decoded user data to the request object
     return handler(req, res);
   } catch (error) {
-    // return res.status(500).json({ success: false, message: "Invalid token" });
     console.log("error: ", error)
+    return res.status(401).json({ success: false, message: "Invalid token" });
   }
 };
 

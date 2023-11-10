@@ -2,7 +2,7 @@ import dbCon from "@/middlewares/dbCon";
 import User from "@/models/User";
 
 const handler = async (req, res) => {
-  if (req.method !== "POST") res.status(500).json({ message: "bad request" });
+  if (req.method !== "POST") res.status(400).json({ message: "bad request" });
 
   const { email, password } = req.body;
 

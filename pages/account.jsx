@@ -2,15 +2,15 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useAuth } from "@/context/useAuth";
-import { BaseUrl } from "./_app";
 import { parse } from "cookie";
-import { useCart } from "@/context/useCart";
+import { useAtom } from "jotai";
+import { BaseUrl, dropdownAtom } from "@/global/Atoms";
+import useAuth from "@/hooks/useAuth";
 
 const Account = () => {
-  const { userDetails, setUserDetails, tokenExpired, loading, setLoading } =
+  const { userDetails, setUserDetails, user, setUser, loading, setLoading } =
     useAuth();
-  const { toggleDropDown } = useCart();
+    const [, setDropdown] = useAtom(dropdownAtom)
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -22,7 +22,7 @@ const Account = () => {
 
   useEffect(() => {
     if (!loading) {
-      if (tokenExpired) {
+      if (!user) {
         toast.error("Please login again.", {
           position: "bottom-center",
           autoClose: 5000,
@@ -80,16 +80,30 @@ const Account = () => {
       setLoading(false);
     } catch (error) {
       console.log(error);
-      toast.error(error.response.data.message, {
-        position: "bottom-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-      });
+      if (error.response.status == 401) {
+        setUser(false)
+        toast.error("Please login again.", {
+          position: "bottom-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      } else {
+        toast.error(error.response.data.message, {
+          position: "bottom-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      }
       setLoading(false);
     }
   };
@@ -142,16 +156,30 @@ const Account = () => {
         setLoading(false);
       } catch (error) {
         console.log(error);
-        toast.error(error.response.data.message, {
-          position: "bottom-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "colored",
-        });
+        if (error.response.status == 401) {
+          setUser(false)
+          toast.error("Please login again.", {
+            position: "bottom-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+          });
+        } else {
+          toast.error(error.response.data.message, {
+            position: "bottom-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+          });
+        }
         setLoading(false);
       }
       setPassword("");
@@ -162,8 +190,8 @@ const Account = () => {
 
   return (
     <div
-      className="container px-2 sm:m-auto"
-      onClick={() => toggleDropDown(false)}
+      className="container px-2 sm:m-auto min-h-screen"
+      onClick={() => setDropdown(false)}
     >
       <h1 className="font-bold text-3xl my-8 text-center">Account</h1>
       <h2 className="font-bold text-xl">1. Delivery Details</h2>

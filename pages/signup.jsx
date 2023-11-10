@@ -3,17 +3,17 @@ import Link from "next/link";
 import React from "react";
 import { useFormik } from "formik";
 import axios from "axios";
-import { BaseUrl } from "./_app";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/router";
 import { parse } from "cookie";
-import { useAuth } from "@/context/useAuth";
-import { useCart } from "@/context/useCart";
+import { BaseUrl, dropdownAtom } from "@/global/Atoms";
+import useAuth from "@/hooks/useAuth";
+import { useAtom } from "jotai";
 
 const Signup = () => {
   const { setUser } = useAuth();
-  const { toggleDropDown } = useCart();
+  const [, toggleDropDown] = useAtom(dropdownAtom);
   const router = useRouter();
   const formik = useFormik({
     initialValues: {

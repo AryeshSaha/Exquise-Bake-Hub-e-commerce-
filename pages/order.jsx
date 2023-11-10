@@ -1,10 +1,10 @@
 /* eslint-disable @next/next/no-img-element */
+import { BaseUrl } from "@/global/Atoms";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { BsCurrencyRupee, BsFillPrinterFill } from "react-icons/bs";
-import { BaseUrl } from "./_app";
 
-const Order = ({ order }) => {
+const Order = ({ order, tokenStatus }) => {
   const { toggleDropDown } = useCart();
   const { amount, orderId, products, status, createdAt } = order;
   const [date, setDate] = useState();
@@ -19,6 +19,27 @@ const Order = ({ order }) => {
     };
     setDate(d.toLocaleString("en-IN", options));
   }, [createdAt]);
+
+  if (tokenStatus && tokenStatus === 401) {
+    setTokenExpired(true);
+    setUser(false);
+    toast.error("please login again", {
+      position: "bottom-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
+    return (
+      <>
+        <div className="min-h-screen"></div>
+      </>
+    );
+  }
+
   return (
     <section
       className="text-gray-600 body-font overflow-hidden"
@@ -107,7 +128,21 @@ export async function getServerSideProps(context) {
     // Passing data to the page via props
     return { props: { order } };
   } catch (error) {
-    return { props: { error } };
+    if (error.response.status == 401) {
+      return {
+        props: {
+          tokenStatus: error.response.status,
+        },
+      };
+    } else {
+      return {
+        redirect: {
+          destination:
+            "/login?message=Please%20log%20in%20to%20access%20this%20page",
+          permanent: false,
+        },
+      };
+    }
   }
 }
 

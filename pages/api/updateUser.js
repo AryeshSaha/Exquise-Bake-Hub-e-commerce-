@@ -15,7 +15,7 @@ const handler = async (req, res) => {
 
     try {
       const userExists = await User.findById(user.id);
-      if (!userExists) res.status(401).json({ msg: "User doesn't exist" });
+      if (!userExists) res.status(403).json({ msg: "User doesn't exist" });
 
       const updatedUser = await User.findOneAndUpdate(
         { email: userExists.email },

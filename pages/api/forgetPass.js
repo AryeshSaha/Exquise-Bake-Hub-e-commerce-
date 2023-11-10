@@ -19,7 +19,7 @@ const transporter = nodemailer.createTransport({
 });
 
 const handler = async (req, res) => {
-  if (req.method !== "POST") res.status(401).json({ message: "bad request" });
+  if (req.method !== "POST") res.status(400).json({ message: "bad request" });
   const { email } = req.body;
 
   try {

@@ -2,18 +2,18 @@
 import axios from "axios";
 import Link from "next/link";
 import React, { useState } from "react";
-import { BaseUrl } from "./_app";
-import { useCart } from "@/context/useCart";
+import { useAtom } from "jotai";
+import { BaseUrl, dropdownAtom } from "@/global/Atoms";
 
 const Cakes = ({ cakes }) => {
-  const { toggleDropDown } = useCart();
+  const [, setDropdown ] = useAtom(dropdownAtom);
   const cakesKeys = Object.keys(cakes);
   const [hoveredItem, setHoveredItem] = useState(null);
   return (
     <>
       <section
         className="text-gray-600 body-font min-h-screen"
-        onClick={() => toggleDropDown(false)}
+        onClick={() => setDropdown(false)}
       >
         <div className="container px-5 py-16 md:py-24 mx-auto">
           <div className="flex flex-wrap -m-4 justify-center">

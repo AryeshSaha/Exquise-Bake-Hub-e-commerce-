@@ -4,7 +4,7 @@ import User from "@/models/User";
 
 const handler = async (req, res) => {
   if (req.method !== "PUT") {
-    res.status(404).json({ message: "bad request" });
+    res.status(400).json({ message: "bad request" });
   }
 
   const { id } = req.user;
@@ -23,7 +23,7 @@ const handler = async (req, res) => {
   }
   try {
     const user = await User.findById(id);
-    if (!user) res.status(401).json({ message: "User doesn't exist. " });
+    if (!user) res.status(403).json({ message: "User doesn't exist. " });
 
     if (await user.CheckPassword(password)) {
       user.password = nPassword;

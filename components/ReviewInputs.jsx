@@ -3,13 +3,13 @@ import StarRating from "./StarRating";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { BaseUrl } from "@/pages/_app";
 import { useAtom } from "jotai";
-import { reviewsAtom } from "@/global/Atoms";
-import { useAuth } from "@/context/useAuth";
+import { BaseUrl, reviewsAtom } from "@/global/Atoms";
+import useAuth from "@/hooks/useAuth";
+// import { useAuth } from "@/context/useAuth";
 
 const ReviewInputs = ({ cake }) => {
-  const { user } = useAuth()
+  const { user, setUser } = useAuth();
   const [rating, setRating] = useState(0);
   const [textReview, setTextReview] = useState("");
   const [feedbacks, setFeedbacks] = useAtom(reviewsAtom);
@@ -27,19 +27,19 @@ const ReviewInputs = ({ cake }) => {
   };
 
   const handleSubmit = async () => {
+    if (!user)
+      toast.error("Please create an account or login to leave a review", {
+        position: "bottom-left",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
 
-    if(!user) toast.error("Please create an account or login to leave a review", {
-      position: "bottom-left",
-      autoClose: 3000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "colored",
-    });
-
-// review submit operation
+    // review submit operation
     const config = {
       headers: {
         "Content-Type": "application/json",
@@ -68,16 +68,30 @@ const ReviewInputs = ({ cake }) => {
       });
     } catch (error) {
       console.log(error);
-      toast.error(error.response.data.error, {
-        position: "bottom-left",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-      });
+      if (error.response.status == 401) {
+        setUser(false);
+        toast.error("Please login again.", {
+          position: "bottom-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      } else {
+        toast.error(error.response.data.error, {
+          position: "bottom-left",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      }
     }
   };
 

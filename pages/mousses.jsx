@@ -2,11 +2,11 @@
 import axios from "axios";
 import Link from "next/link";
 import React, { useState } from "react";
-import { BaseUrl } from "./_app";
-import { useCart } from "@/context/useCart";
+import { useAtom } from "jotai";
+import { BaseUrl, dropdownAtom } from "@/global/Atoms";
 
 const Mousses = ({ mousses }) => {
-  const { toggleDropDown } = useCart();
+  const [, toggleDropDown ] = useAtom(dropdownAtom);
   const mousseKeys = Object.keys(mousses); // [array of keys from the mousses object]
   const [hoveredItem, setHoveredItem] = useState(null);
   return (

@@ -3,17 +3,17 @@ import Link from "next/link";
 import React, { useEffect } from "react";
 import { useFormik } from "formik";
 import axios from "axios";
-import { BaseUrl } from "./_app";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/router";
-import { useAuth } from "@/context/useAuth";
 import { parse } from "cookie";
-import { useCart } from "@/context/useCart";
+import { useAtom } from "jotai";
+import { BaseUrl, dropdownAtom } from "@/global/Atoms";
+import useAuth from "@/hooks/useAuth";
 
 const Login = () => {
   const { setUser } = useAuth();
-  const { toggleDropDown } = useCart();
+  const [ , setDropdown ] = useAtom(dropdownAtom);
   const router = useRouter();
   const message = router.query.message || "";
 
@@ -82,7 +82,7 @@ const Login = () => {
   return (
     <section
       className="bg-gray-50 dark:bg-gray-900"
-      onClick={() => toggleDropDown(false)}
+      onClick={() => setDropdown(false)}
     >
       <ToastContainer
         position="bottom-left"

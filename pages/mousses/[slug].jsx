@@ -3,21 +3,24 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { FaRupeeSign, FaShoppingCart, FaHeart } from "react-icons/fa";
-import { BaseUrl } from "../_app";
-import { useCart } from "@/context/useCart";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Tooltip } from "react-tooltip";
 import Error from "next/error";
-import { useAuth } from "@/context/useAuth";
 import { BsStar, BsStarFill, BsStarHalf } from "react-icons/bs";
 import { Element, Link } from "react-scroll";
 import Reviews from "@/components/Reviews";
 import ReviewInputs from "@/components/ReviewInputs";
+import { useAtom } from "jotai";
+import { BaseUrl, cartSidebarAtom, dropdownAtom } from "@/global/Atoms";
+import useCart from "@/hooks/useCart";
+import useAuth from "@/hooks/useAuth";
 
-const Slug = ({ cart, addToCart, mousse, variants, error, orderNow }) => {
-  const { user } = useAuth()
-  const { toggleCart, toggleDropDown } = useCart();
+const Slug = ({ mousse, variants, reviews, error }) => {
+  const { user } = useAuth();
+  const { cart, addToCart, orderNow } = useCart();
+  const [isCartOpen, toggleCart] = useAtom(cartSidebarAtom);
+  const [, toggleDropDown] = useAtom(dropdownAtom);
   const router = useRouter();
   const { slug } = router.query;
   const [pin, setPin] = useState();
@@ -97,14 +100,17 @@ const Slug = ({ cart, addToCart, mousse, variants, error, orderNow }) => {
       setInService(null);
     }
   };
-  
+
   if (error === 404) {
-    return <Error statusCode={error} />
+    return <Error statusCode={error} />;
   }
 
   return (
     <>
-      <section className="text-gray-600 body-font overflow-hidden min-h-screen" onClick={()=> toggleDropDown(false)}>
+      <section
+        className="text-gray-600 body-font overflow-hidden min-h-screen"
+        onClick={() => toggleDropDown(false)}
+      >
         <ToastContainer newestOnTop rtl={false} pauseOnFocusLoss={false} />
         <div className="container px-5 py-16 md:py-44 mx-auto">
           <div className="lg:w-4/5 mx-auto flex flex-wrap">
@@ -205,7 +211,7 @@ const Slug = ({ cart, addToCart, mousse, variants, error, orderNow }) => {
                   </div>
                 </div>
               </div>
-              
+
               {/* Stock Info */}
               {mousse.availableQty === 0 && (
                 <p className="text-rose-600 capitalize">Out of stock!</p>
@@ -259,7 +265,7 @@ const Slug = ({ cart, addToCart, mousse, variants, error, orderNow }) => {
                           progress: undefined,
                           theme: "colored",
                         });
-                        toggleCart();
+                        toggleCart(!isCartOpen);
                       }
                     }}
                     className="capitalize flex md:ml-4 text-white bg-indigo-500 border-0 py-2 px-2 focus:outline-none hover:bg-indigo-600 disabled:bg-indigo-300 rounded"
@@ -309,10 +315,10 @@ const Slug = ({ cart, addToCart, mousse, variants, error, orderNow }) => {
       <section className="h-auto">
         <div className="container mx-auto px-5 py-8 flex flex-col justify-center items-center mb-10">
           <Element name="reviews" className="w-full mb-10">
-            <Reviews />
+            <Reviews reviews={reviews} />
           </Element>
           <Element name="give_review" className="w-full">
-            <ReviewInputs />
+            <ReviewInputs product={mousse} />
           </Element>
         </div>
       </section>
@@ -327,8 +333,13 @@ export async function getServerSideProps(context) {
     const { data } = await axios.post(`${BaseUrl}/api/getslug1`, {
       slug: context.query.slug,
     });
+    const {
+      data: { reviews },
+    } = await axios.post(`${BaseUrl}/api/reviews`, {
+      title: data.mousse.title,
+    });
     // Passing data to the page via props
-    return { props: { mousse: data.mousse, variants: data.variants } };
+    return { props: { mousse: data.mousse, variants: data.variants, reviews } };
   } catch (error) {
     console.log(error);
     return { props: { error: 404 } };

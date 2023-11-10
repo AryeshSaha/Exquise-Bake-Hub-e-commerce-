@@ -4,29 +4,24 @@ import { FaShoppingCart } from "react-icons/fa";
 import { RiAccountCircleFill, RiArrowDropDownLine } from "react-icons/ri";
 import { RxCross1, RxHamburgerMenu } from "react-icons/rx";
 import CartContent from "./CartContent";
-import { useCart } from "@/context/useCart";
 import { Tooltip } from "react-tooltip";
 import { useRouter } from "next/router";
-import { useAuth } from "@/context/useAuth";
 import axios from "axios";
-import { BaseUrl } from "@/pages/_app";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useAtom } from "jotai";
+import { BaseUrl, cartSidebarAtom, dropdownAtom } from "@/global/Atoms";
+import useAuth from "@/hooks/useAuth";
 
-const NavBar = ({
-  cart,
-  addToCart,
-  reduceFromCart,
-  clearCart,
-  subTotalAmt,
-}) => {
+const NavBar = () => {
   const { user, setUser } = useAuth();
-  const { isCartOpen, toggleCart, dropdown, toggleDropDown } = useCart();
+  const [isCartOpen, setIsCartOpen] = useAtom(cartSidebarAtom);
+  const [dropdown, setDropdown] = useAtom(dropdownAtom);
   const [isBurger, setIsBurger] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
-    toggleDropDown(false);
+    setDropdown(false);
     setIsBurger(true);
   }, [router.query]);
 
@@ -65,7 +60,7 @@ const NavBar = ({
           <button
             className="border-none outline-none bg-transparent rounded-sm lg:hidden"
             onClick={() => {
-              toggleDropDown(false);
+              setDropdown(false);
               setIsBurger(!isBurger);
             }}
           >
@@ -114,7 +109,7 @@ const NavBar = ({
             id="dropdownHoverButton"
             onClick={() => {
               setIsBurger(true);
-              toggleDropDown((prev) => !prev);
+              setDropdown((prev) => !prev);
             }}
             className="inline-flex items-center border-0 p-2 -mr-3 md:mr-0 focus:outline-none hover:bg-gray-300 rounded-full text-base"
             data-tooltip-id="account"
@@ -128,7 +123,11 @@ const NavBar = ({
           {/* {dropdown && ( */}
           <div
             className={`z-10 absolute ${
-              dropdown ? user ? "translate-y-20" : "translate-y-16" : "-translate-y-full"
+              dropdown
+                ? user
+                  ? "translate-y-20"
+                  : "translate-y-16"
+                : "-translate-y-full"
             } right-10 transform transition-transform duration-500 ease-in-out text-center lg:text-left text-xl md:text-base md:left-auto bg-white divide-y divide-gray-100 rounded-lg shadow w-52 dark:bg-gray-700`}
           >
             <ul
@@ -140,7 +139,7 @@ const NavBar = ({
                   <li>
                     <Link
                       href="/login"
-                      onClick={() => toggleDropDown(false)}
+                      onClick={() => setDropdown(false)}
                       className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                     >
                       Sign in
@@ -149,7 +148,7 @@ const NavBar = ({
                   <li>
                     <Link
                       href="/signup"
-                      onClick={() => toggleDropDown(false)}
+                      onClick={() => setDropdown(false)}
                       className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                     >
                       Sign up
@@ -161,7 +160,7 @@ const NavBar = ({
                   <li>
                     <Link
                       href="/account"
-                      onClick={() => toggleDropDown(false)}
+                      onClick={() => setDropdown(false)}
                       className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                     >
                       Account
@@ -170,7 +169,7 @@ const NavBar = ({
                   <li>
                     <Link
                       href="/orders"
-                      onClick={() => toggleDropDown(false)}
+                      onClick={() => setDropdown(false)}
                       className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                     >
                       Orders
@@ -180,7 +179,7 @@ const NavBar = ({
                     <div
                       onClick={() => {
                         logoutHandler();
-                        toggleDropDown(false);
+                        setDropdown(false);
                       }}
                       className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
                     >
@@ -194,9 +193,9 @@ const NavBar = ({
           {/* )} */}
           <button
             onClick={() => {
-              toggleDropDown(false);
+              setDropdown(false);
               setIsBurger(true);
-              toggleCart();
+              setIsCartOpen(true);
             }}
             className="inline-flex items-center border-0 p-2 focus:outline-none hover:bg-gray-300 rounded-full text-base"
             data-tooltip-id="cart"
@@ -214,12 +213,7 @@ const NavBar = ({
           } duration-500 ease-in-out text-gray-600 body-font w-full md:w-auto md:min-w-[25rem] min-h-screen overflow-y-scroll bg-indigo-100`}
         >
           <CartContent
-            cart={cart}
-            addToCart={addToCart}
-            reduceFromCart={reduceFromCart}
-            clearCart={clearCart}
-            toggleCart={toggleCart}
-            subTotalAmt={subTotalAmt}
+            setIsCartOpen={setIsCartOpen}
             isCheckout={false}
           />
         </section>

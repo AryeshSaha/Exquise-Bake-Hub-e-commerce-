@@ -1,15 +1,16 @@
+import { loadingAtom, userAtom, userDetailsAtom } from "@/global/Atoms";
 import { BaseUrl } from "@/pages/_app";
 import axios from "axios";
-import { createContext, useContext, useEffect, useState } from "react";
+import { useAtom } from "jotai";
+import { createContext, useContext, useEffect } from "react";
 
 const AuthContext = createContext();
 
 export default function AuthProvider({ children }) {
   // logged in or not
-  const [user, setUser] = useState(false);
-  const [userDetails, setUserDetails] = useState();
-  const [tokenExpired, setTokenExpired] = useState(true);
-  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useAtom(userAtom);
+  const [userDetails, setUserDetails] = useAtom(userDetailsAtom);
+  const [loading, setLoading] = useAtom(loadingAtom);
 
   useEffect(() => {
     tokenExpiry();
@@ -26,15 +27,17 @@ export default function AuthProvider({ children }) {
       });
       if (data.success) {
         // Review: Token Expiry
-        setTokenExpired(false);
         setUser(true);
         setUserDetails(data.user);
         setLoading(false);
       }
     } catch (error) {
-      setTokenExpired(true);
+      await axios.get(`${BaseUrl}/api/sessionexpire`, {
+        withCredentials: true,
+      });
+      setUser(false);
       setLoading(false);
-      console.log(error.response?.data.message);
+      console.log("from token expiry: ",error.response?.data.message);
     }
   };
 
@@ -45,7 +48,6 @@ export default function AuthProvider({ children }) {
         setUserDetails,
         user,
         setUser,
-        tokenExpired,
         loading,
         setLoading,
       }}

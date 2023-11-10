@@ -3,7 +3,7 @@ import dbCon from "@/middlewares/dbCon";
 const { default: User } = require("@/models/User");
 
 const handler = async (req, res) => {
-  if (req.method !== "GET") res.status(401).json({ message: "bad request" });
+  if (req.method !== "GET") res.status(400).json({ message: "bad request" });
 
   const token = req.headers.authorization;
 

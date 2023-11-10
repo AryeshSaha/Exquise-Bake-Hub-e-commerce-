@@ -2,8 +2,8 @@
 import axios from "axios";
 import Link from "next/link";
 import React, { useState } from "react";
-import { BaseUrl } from "./_app";
 import { useRouter } from "next/router";
+import { BaseUrl } from "@/global/Atoms";
 
 const Forgotpass = () => {
   const [email, setEmail] = useState("");
@@ -63,11 +63,11 @@ const Forgotpass = () => {
   };
 
   return (
-    <section className="bg-gray-50 dark:bg-gray-900">
+    <section className="bg-gray-50">
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
         <Link
           href="#"
-          className="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white"
+          className="flex items-center mb-6 text-2xl font-semibold text-gray-900 "
         >
           <img
             className="w-8 h-8 mr-2"
@@ -76,13 +76,13 @@ const Forgotpass = () => {
           />
           Flowbite
         </Link>
-        <div className="w-full p-6 bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md dark:bg-gray-800 dark:border-gray-700 sm:p-8">
+        <div className="w-full p-6 bg-white rounded-lg shadow md:mt-0 sm:max-w-md sm:p-8">
           {!sendOtp && (
             <>
-              <h1 className="mb-1 text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+              <h1 className="mb-1 text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl ">
                 Forgot your password?
               </h1>
-              <p className="font-light text-gray-500 dark:text-gray-400">
+              <p className="font-light text-gray-500">
                 Dont fret! Just type in your email and we will send you a code
                 to reset your password!
               </p>
@@ -91,7 +91,7 @@ const Forgotpass = () => {
                 <div>
                   <label
                     htmlFor="email"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    className="block mb-2 text-sm font-medium text-gray-900 "
                   >
                     Your email
                   </label>
@@ -101,7 +101,7 @@ const Forgotpass = () => {
                     id="email"
                     value={email}
                     onChange={handleChange}
-                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                     placeholder="name@company.com"
                     required
                   />
@@ -109,7 +109,7 @@ const Forgotpass = () => {
 
                 <button
                   onClick={sendOTP}
-                  className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                  className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                 >
                   Send OTP
                 </button>
@@ -121,7 +121,7 @@ const Forgotpass = () => {
               <div>
                 <label
                   htmlFor="otp"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  className="block mb-2 text-sm font-medium text-gray-900 "
                 >
                   Enter the code
                 </label>
@@ -131,7 +131,7 @@ const Forgotpass = () => {
                   id="otp"
                   value={otp}
                   onChange={handleChange}
-                  className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                   placeholder="XZW712"
                   required
                 />
@@ -139,7 +139,7 @@ const Forgotpass = () => {
 
               <button
                 onClick={verifyOTP}
-                className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
               >
                 Verify
               </button>

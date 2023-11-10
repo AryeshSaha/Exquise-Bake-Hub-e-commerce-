@@ -1,20 +1,44 @@
 import axios from "axios";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import { BaseUrl } from "./_app";
 import { FaRupeeSign } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { MdNavigateNext } from "react-icons/md";
+import { BaseUrl, dropdownAtom } from "@/global/Atoms";
+import { useAtom } from "jotai";
+import useAuth from "@/hooks/useAuth";
 
-const Orders = ({ data }) => {
+const Orders = ({ data, status }) => {
   const [orders, setOrders] = useState([]);
-  const { toggleDropDown } = useCart();
+  const [, setDropdown] = useAtom(dropdownAtom);
+  const { setUser, setTokenExpired } = useAuth();
 
   useEffect(() => {
     console.log("orders: ", data);
     setOrders(data);
   }, [data]);
+
+  if (status && status === 401) {
+    // toast.dismiss();
+    toast.error("please login again", {
+      position: "bottom-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
+    setTokenExpired(true);
+    setUser(false);
+    return (
+      <>
+        <div className="min-h-screen"></div>
+      </>
+    );
+  }
 
   const dateMaker = (date) => {
     const d = new Date(date);
@@ -30,7 +54,7 @@ const Orders = ({ data }) => {
     <>
       <div
         className="container px-5 md:py-20 mx-auto min-h-screen"
-        onClick={() => toggleDropDown(false)}
+        onClick={() => setDropdown(false)}
       >
         {Object.keys(orders).length <= 0 && (
           <>
@@ -165,13 +189,22 @@ export const getServerSideProps = async (context) => {
       },
     };
   } catch (error) {
-    return {
-      redirect: {
-        destination:
-          "/login?message=Please%20log%20in%20to%20access%20this%20page",
-        permanent: false,
-      },
-    };
+    console.log(error.response.status);
+    if (error.response.status == 401) {
+      return {
+        props: {
+          status: error.response.status,
+        },
+      };
+    } else {
+      return {
+        redirect: {
+          destination:
+            "/login?message=Please%20log%20in%20to%20access%20this%20page",
+          permanent: false,
+        },
+      };
+    }
   }
 };
 

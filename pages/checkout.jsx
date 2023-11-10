@@ -2,15 +2,18 @@ import CartContent from "@/components/CartContent";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { BsCurrencyRupee, BsFillBagCheckFill } from "react-icons/bs";
-import { BaseUrl } from "./_app";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useAuth } from "@/context/useAuth";
 import { parse } from "cookie";
+import { useAtom } from "jotai";
+import { BaseUrl, dropdownAtom } from "@/global/Atoms";
+import useCart from "@/hooks/useCart";
+import useAuth from "@/hooks/useAuth";
 
-const Checkout = ({ cart, subTotalAmt, addToCart, reduceFromCart }) => {
-  const { toggleDropDown } = useCart();
-  const { loading, tokenExpired, userDetails } = useAuth();
+const Checkout = () => {
+  const [, toggleDropDown] = useAtom(dropdownAtom);
+  const { loading, setUser, user, userDetails } = useAuth();
+  const { cart, subTotalAmt } = useCart()
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -22,7 +25,7 @@ const Checkout = ({ cart, subTotalAmt, addToCart, reduceFromCart }) => {
 
   useEffect(() => {
     if (!loading) {
-      if (tokenExpired) {
+      if (!user) {
         toast.error("Please login again.", {
           position: "bottom-center",
           autoClose: 5000,
@@ -64,6 +67,7 @@ const Checkout = ({ cart, subTotalAmt, addToCart, reduceFromCart }) => {
         progress: undefined,
         theme: "colored",
       });
+
       setCity("");
       setState("");
     }
@@ -169,22 +173,36 @@ const Checkout = ({ cart, subTotalAmt, addToCart, reduceFromCart }) => {
       const rzpPopup = new window.Razorpay(options);
       rzpPopup.open();
     } catch (error) {
-      toast.error(error.response.data.error, {
-        position: "bottom-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-      });
+      if (error.response.status == 401) {
+        setUser(false);
+        toast.error("Please login again.", {
+          position: "bottom-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      } else {
+        toast.error(error.response.data.error, {
+          position: "bottom-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      }
     }
   };
 
   return (
     <div
-      className="container px-2 sm:m-auto"
+      className="container px-2 sm:m-auto min-h-screen"
       onClick={() => toggleDropDown(false)}
     >
       <h1 className="font-bold text-3xl my-8 text-center">Checkout</h1>
@@ -313,13 +331,7 @@ const Checkout = ({ cart, subTotalAmt, addToCart, reduceFromCart }) => {
       {/* Cart Items */}
       <h2 className="font-bold text-xl">2. Review Cart Items</h2>
       <div className="w-auto xl:w-[50vw] mx-auto bg-gray-200 rounded-xl">
-        <CartContent
-          cart={cart}
-          addToCart={addToCart}
-          reduceFromCart={reduceFromCart}
-          subTotalAmt={subTotalAmt}
-          isCheckout={true}
-        />
+        <CartContent isCheckout={true} />
       </div>
       {/* Pay Button */}
       <div className="flex justify-end mt-8">

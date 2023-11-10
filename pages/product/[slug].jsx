@@ -3,20 +3,23 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { FaRupeeSign, FaShoppingCart, FaHeart } from "react-icons/fa";
-import { BaseUrl } from "../_app";
-import { useCart } from "@/context/useCart";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Tooltip } from "react-tooltip";
 import Error from "next/error";
-import { useAuth } from "@/context/useAuth";
 import { BsStar, BsStarFill, BsStarHalf } from "react-icons/bs";
 import { Element, Link } from "react-scroll";
 import Reviews from "@/components/Reviews";
 import ReviewInputs from "@/components/ReviewInputs";
+import { useAtom } from "jotai";
+import { BaseUrl, cartSidebarAtom, dropdownAtom } from "@/global/Atoms";
+import useAuth from "@/hooks/useAuth";
+import useCart from "@/hooks/useCart";
 
-const Slug = ({ cart, addToCart, cake, variants, reviews, error, orderNow }) => {
-  const { toggleCart, toggleDropDown } = useCart();
+const Slug = ({ cake, variants, reviews, error }) => {
+  const { cart, addToCart, orderNow } = useCart();
+  const [isCartOpen, setIsCartOpen] = useAtom(cartSidebarAtom)
+  const [, setDropdown] = useAtom(dropdownAtom)
   const { user } = useAuth();
   const router = useRouter();
   const { slug } = router.query;
@@ -104,7 +107,7 @@ const Slug = ({ cart, addToCart, cake, variants, reviews, error, orderNow }) => 
     <>
       <section
         className="text-gray-600 body-font overflow-hidden min-h-screen"
-        onClick={() => toggleDropDown(false)}
+        onClick={() => setDropdown(false)}
       >
         <ToastContainer newestOnTop rtl={false} pauseOnFocusLoss={false} />
         <div className="container px-5 py-16 md:py-44 mx-auto">
@@ -221,7 +224,6 @@ const Slug = ({ cart, addToCart, cake, variants, reviews, error, orderNow }) => 
                   <button
                     onClick={() =>
                       orderNow(
-                        user,
                         slug,
                         cake.title,
                         1,
@@ -240,7 +242,6 @@ const Slug = ({ cart, addToCart, cake, variants, reviews, error, orderNow }) => 
                     onClick={() => {
                       if (!inCart) {
                         addToCart(
-                          user,
                           slug,
                           cake.title,
                           1,
@@ -260,7 +261,7 @@ const Slug = ({ cart, addToCart, cake, variants, reviews, error, orderNow }) => 
                           progress: undefined,
                           theme: "colored",
                         });
-                        toggleCart();
+                        setIsCartOpen(!isCartOpen);
                       }
                     }}
                     className="capitalize flex ml-auto md:ml-4 text-white bg-indigo-500 border-0 py-2 px-2 focus:outline-none hover:bg-indigo-600 disabled:bg-indigo-300 rounded"
@@ -325,7 +326,7 @@ const Slug = ({ cart, addToCart, cake, variants, reviews, error, orderNow }) => 
             <Reviews reviews={reviews} />
           </Element>
           <Element name="give_review" className="w-full">
-            <ReviewInputs cake={cake} />
+            <ReviewInputs product={cake} />
           </Element>
         </div>
       </section>
