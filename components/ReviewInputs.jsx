@@ -8,7 +8,7 @@ import { BaseUrl, reviewsAtom } from "@/global/Atoms";
 import useAuth from "@/hooks/useAuth";
 // import { useAuth } from "@/context/useAuth";
 
-const ReviewInputs = ({ cake }) => {
+const ReviewInputs = ({ product }) => {
   const { user, setUser } = useAuth();
   const [rating, setRating] = useState(0);
   const [textReview, setTextReview] = useState("");
@@ -49,7 +49,7 @@ const ReviewInputs = ({ cake }) => {
     try {
       const { data } = await axios.post(
         `${BaseUrl}/api/feedback`,
-        { rating, review: textReview, title: cake.title },
+        { rating, review: textReview, title: product.title },
         config
       );
       console.log(data);
@@ -68,7 +68,7 @@ const ReviewInputs = ({ cake }) => {
       });
     } catch (error) {
       console.log(error);
-      if (error.response.status == 401) {
+      if (error.response.status === 401) {
         setUser(false);
         toast.error("Please login again.", {
           position: "bottom-center",
