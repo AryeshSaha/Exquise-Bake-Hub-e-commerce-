@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import "@/styles/globals.css";
 import NavBar from "@/components/NavBar";
 import Footer from "@/components/Footer";
@@ -17,7 +18,7 @@ export default function App({ Component, pageProps }) {
 
   useEffect(() => {
     tokenExpiry();
-    console.log("useEffect from useAuth");
+    console.log("useEffect from _app.jsx");
   }, [user]);
 
   useEffect(() => {

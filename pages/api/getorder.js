@@ -1,3 +1,4 @@
+import Auth from "@/middlewares/auth";
 import dbCon from "@/middlewares/dbCon";
 import Order from "@/models/Order";
 
@@ -10,4 +11,4 @@ const handler = async (req, res) => {
   } else res.status(400).json({ msg: "bad request" });
 };
 
-export default dbCon(handler);
+export default dbCon(Auth(handler));

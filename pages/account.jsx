@@ -10,7 +10,7 @@ import useAuth from "@/hooks/useAuth";
 const Account = () => {
   const { userDetails, setUserDetails, user, setUser, loading, setLoading } =
     useAuth();
-    const [, setDropdown] = useAtom(dropdownAtom)
+  const [, setDropdown] = useAtom(dropdownAtom);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -23,7 +23,7 @@ const Account = () => {
   useEffect(() => {
     if (!loading) {
       if (!user) {
-        toast.error("Please login again.", {
+        toast.error("Session expired. Please login again.", {
           position: "bottom-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -41,7 +41,7 @@ const Account = () => {
         if (userDetails.pincode) setPincode(userDetails.pincode);
       }
     }
-  }, [loading, userDetails]);
+  }, [user, loading, userDetails]);
 
   const handleChange = async (e) => {
     if (e.target.name == "name") setName(e.target.value);
@@ -81,7 +81,7 @@ const Account = () => {
     } catch (error) {
       console.log(error);
       if (error.response.status == 401) {
-        setUser(false)
+        setUser(false);
         toast.error("Please login again.", {
           position: "bottom-center",
           autoClose: 5000,
@@ -157,7 +157,7 @@ const Account = () => {
       } catch (error) {
         console.log(error);
         if (error.response.status == 401) {
-          setUser(false)
+          setUser(false);
           toast.error("Please login again.", {
             position: "bottom-center",
             autoClose: 5000,

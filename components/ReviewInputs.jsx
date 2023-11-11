@@ -70,7 +70,7 @@ const ReviewInputs = ({ product }) => {
       console.log(error);
       if (error.response.status === 401) {
         setUser(false);
-        toast.error("Please login again.", {
+        toast.error("Session expired. Please login again.", {
           position: "bottom-center",
           autoClose: 5000,
           hideProgressBar: false,

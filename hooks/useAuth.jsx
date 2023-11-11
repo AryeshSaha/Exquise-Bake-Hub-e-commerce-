@@ -1,4 +1,9 @@
-import { BaseUrl, loadingAtom, userAtom, userDetailsAtom } from "@/global/Atoms";
+import {
+  BaseUrl,
+  loadingAtom,
+  userAtom,
+  userDetailsAtom,
+} from "@/global/Atoms";
 import axios from "axios";
 import { useAtom } from "jotai";
 
@@ -21,10 +26,15 @@ const useAuth = () => {
         setLoading(false);
       }
     } catch (error) {
-      // await axios.get(`${BaseUrl}/api/sessionexpire`, {
-      //   withCredentials: true,
-      // });
-      setUser(false);
+      try {
+        await axios.get(`${BaseUrl}/api/sessionexpire`, {
+          withCredentials: true,
+        });
+        setUser(false);
+      } catch (err) {
+        console.log("err from token expiry: ", err);
+        setUser(false);
+      }
       setLoading(false);
       console.log("from token expiry: ", error.response?.data.message);
     }

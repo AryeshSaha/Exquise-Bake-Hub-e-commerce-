@@ -2,17 +2,16 @@ import axios from "axios";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { FaRupeeSign } from "react-icons/fa";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { MdNavigateNext } from "react-icons/md";
 import { BaseUrl, dropdownAtom } from "@/global/Atoms";
 import { useAtom } from "jotai";
 import useAuth from "@/hooks/useAuth";
+import SessionExpired from "@/components/SessionExpired";
 
 const Orders = ({ data, status }) => {
   const [orders, setOrders] = useState([]);
   const [, setDropdown] = useAtom(dropdownAtom);
-  const { setUser, setTokenExpired } = useAuth();
+  const { setUser } = useAuth();
 
   useEffect(() => {
     console.log("orders: ", data);
@@ -20,24 +19,8 @@ const Orders = ({ data, status }) => {
   }, [data]);
 
   if (status && status === 401) {
-    // toast.dismiss();
-    toast.error("please login again", {
-      position: "bottom-center",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "colored",
-    });
-    setTokenExpired(true);
     setUser(false);
-    return (
-      <>
-        <div className="min-h-screen"></div>
-      </>
-    );
+    return <SessionExpired />;
   }
 
   const dateMaker = (date) => {
@@ -153,18 +136,6 @@ const Orders = ({ data, status }) => {
           </>
         )}
       </div>
-      <ToastContainer
-        position="bottom-left"
-        autoClose={6000}
-        hideProgressBar={false}
-        newestOnTop
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="colored"
-      />
     </>
   );
 };
