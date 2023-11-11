@@ -14,6 +14,8 @@ const handler = async (req, res) => {
       httpOnly: true,
       expires: new Date(0),
       path: "/",
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'Strict',
     });
     res.setHeader("Set-Cookie", clearCookie);
     res.status(200).json({
