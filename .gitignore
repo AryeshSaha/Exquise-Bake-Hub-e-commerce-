@@ -34,5 +34,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# to do list
+# personal
 EB-Hub to do list.txt
+rzp.csv

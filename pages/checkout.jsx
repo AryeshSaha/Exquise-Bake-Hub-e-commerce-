@@ -119,7 +119,7 @@ const Checkout = () => {
         withCredentials: true,
       };
       const {
-        data: { order },
+        data: { order, key_id },
       } = await axios.post(
         `${BaseUrl}/api/createorder`,
         {
@@ -149,7 +149,7 @@ const Checkout = () => {
       }
 
       const options = {
-        key: process.env.RZP_KEY_ID,
+        key: key_id,
         amount: order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
         currency: "INR",
         name: "Exquiz Bakery",
@@ -173,6 +173,7 @@ const Checkout = () => {
       const rzpPopup = new window.Razorpay(options);
       rzpPopup.open();
     } catch (error) {
+      console.log("error from checkout: ", error)
       if (error.response.status == 401) {
         setUser(false);
         toast.error("Please login again.", {

@@ -71,7 +71,7 @@ const handler = async (req, res) => {
     })
 
     if (!order) res.status(500).json({ success: false, error: "couldn't create order" });
-    else res.status(200).json({ success: true, order });
+    else res.status(200).json({ success: true, order, key_id:process.env.RZP_KEY_ID });
   } else {
     res.status(400).json({ success: false, error: "bad request" });
   }

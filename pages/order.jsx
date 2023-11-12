@@ -1,44 +1,36 @@
 /* eslint-disable @next/next/no-img-element */
-import { BaseUrl } from "@/global/Atoms";
+import SessionExpired from "@/components/SessionExpired";
+import { BaseUrl, dropdownAtom } from "@/global/Atoms";
+import useAuth from "@/hooks/useAuth";
 import axios from "axios";
+import { useAtom } from "jotai";
 import React, { useEffect, useState } from "react";
 import { BsCurrencyRupee, BsFillPrinterFill } from "react-icons/bs";
 
 const Order = ({ order, tokenStatus }) => {
-  const { toggleDropDown } = useCart();
-  const { amount, orderId, products, status, createdAt } = order;
+  const [, toggleDropDown] = useAtom(dropdownAtom);
+  const { setUser } = useAuth();
   const [date, setDate] = useState();
-
+  
   useEffect(() => {
-    const d = new Date(createdAt);
-    const options = {
-      weekday: "long",
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    };
-    setDate(d.toLocaleString("en-IN", options));
-  }, [createdAt]);
-
-  if (tokenStatus && tokenStatus === 401) {
-    setTokenExpired(true);
-    setUser(false);
-    toast.error("please login again", {
-      position: "bottom-center",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "colored",
-    });
-    return (
-      <>
-        <div className="min-h-screen"></div>
-      </>
-    );
-  }
+    if (tokenStatus) {
+      setUser(false);
+    } else {
+      const d = new Date(order?.createdAt);
+      const options = {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      };
+      setDate(d.toLocaleString("en-IN", options));
+    }
+  }, [tokenStatus, order?.createdAt]);
+  
+  if (tokenStatus && tokenStatus === 401) return <SessionExpired />;
+  
+  const { amount, orderId, products, status } = order;
+  
 
   return (
     <section
@@ -119,14 +111,21 @@ const Order = ({ order, tokenStatus }) => {
 // This gets called on request
 export async function getServerSideProps(context) {
   // Fetching data from external API
+  const cookies = context.req.headers.cookie || "";
+
+  const config = {
+    headers: {
+      Cookie: cookies,
+    },
+    withCredentials: true,
+  };
   try {
-    const {
-      data: { order },
-    } = await axios.get(
-      `${BaseUrl}/api/getorder?orderId=${context.query.orderId}`
+    const { data } = await axios.get(
+      `${BaseUrl}/api/getorder?orderId=${context.query.orderId}`,
+      config
     );
     // Passing data to the page via props
-    return { props: { order } };
+    return { props: { order: data.order } };
   } catch (error) {
     if (error.response.status == 401) {
       return {

@@ -7,7 +7,7 @@ const handler = async (req, res) => {
     const { orderId } = req.query;
     const order = await Order.findOne({ orderId });
 
-    res.status(200).json({ order });
+    res.status(200).json({ success: true, order });
   } else res.status(400).json({ msg: "bad request" });
 };
 

@@ -14,7 +14,6 @@ const Orders = ({ data, status }) => {
   const { setUser } = useAuth();
 
   useEffect(() => {
-    console.log("orders: ", data);
     setOrders(data);
   }, [data]);
 
