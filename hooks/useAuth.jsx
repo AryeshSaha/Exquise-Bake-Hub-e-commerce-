@@ -32,11 +32,9 @@ const useAuth = () => {
         });
         setUser(false);
       } catch (err) {
-        console.log("err from token expiry: ", err);
         setUser(false);
       }
       setLoading(false);
-      console.log("from token expiry: ", error.response?.data.message);
     }
   };
 

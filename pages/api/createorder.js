@@ -15,7 +15,6 @@ const handler = async (req, res) => {
 
       // * Pincode check
       if(!Object.keys(pincodes).includes(pincode)){
-        console.log(pincode)
         res.status(500).json({ success: false, error: "Sorry, We don't provide service in your area." })
         return;
       }

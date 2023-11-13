@@ -12,13 +12,23 @@ import { Element, Link } from "react-scroll";
 import Reviews from "@/components/Reviews";
 import ReviewInputs from "@/components/ReviewInputs";
 import { useAtom } from "jotai";
-import { BaseUrl, cartSidebarAtom, dropdownAtom } from "@/global/Atoms";
+import {
+  BaseUrl,
+  avgRatingAtom,
+  cartSidebarAtom,
+  dropdownAtom,
+  reviewsAtom,
+} from "@/global/Atoms";
 import useCart from "@/hooks/useCart";
+import { RatingCalc } from "@/utils/RatingCalc";
+import AvgStarRating from "@/components/AvgStarRating";
 
 const Slug = ({ mousse, variants, reviews, error }) => {
   const { cart, addToCart, orderNow } = useCart();
   const [isCartOpen, toggleCart] = useAtom(cartSidebarAtom);
   const [, toggleDropDown] = useAtom(dropdownAtom);
+  const [feedbacks, setFeedbacks] = useAtom(reviewsAtom);
+  const [rating, setRating] = useAtom(avgRatingAtom);
   const router = useRouter();
   const { slug } = router.query;
   const [pin, setPin] = useState();
@@ -40,10 +50,15 @@ const Slug = ({ mousse, variants, reviews, error }) => {
     if (slug in cart) setInCart(true);
     else setInCart(false);
     if (!error) {
+      setFeedbacks(reviews);
       setFlavor(mousse.flavor);
       setWeight(mousse.weight);
     }
-  }, [cart, slug, error]);
+  }, [cart, slug, error, reviews, setFeedbacks]);
+
+  useEffect(() => {
+    setRating(RatingCalc(feedbacks));
+  }, [feedbacks]);
 
   const handleFlavorChange = (f) => {
     const url = `${BaseUrl}/mousses/${variants[f][0].slug}`;
@@ -128,14 +143,10 @@ const Slug = ({ mousse, variants, reviews, error }) => {
               <div className="flex mb-4">
                 {/* Reviews */}
                 <span className="flex items-center">
-                  <BsStarFill className="w-4 h-4 text-indigo-600" />
-                  <BsStarFill className="w-4 h-4 text-indigo-600" />
-                  <BsStarFill className="w-4 h-4 text-indigo-600" />
-                  <BsStarHalf className="w-4 h-4 text-indigo-600" />
-                  <BsStar className="w-4 h-4 text-indigo-600" />
+                  <AvgStarRating rating={rating} />
                   <span className="text-gray-600 ml-3 hover:text-red-600 cursor-pointer">
                     <Link to="reviews" smooth={true} duration={500}>
-                      4 Reviews
+                      {feedbacks.length} Reviews
                     </Link>
                   </span>
                   /
@@ -311,10 +322,10 @@ const Slug = ({ mousse, variants, reviews, error }) => {
       <section className="h-auto">
         <div className="container mx-auto px-5 py-8 flex flex-col justify-center items-center mb-10">
           <Element name="reviews" className="w-full mb-10">
-            <Reviews reviews={reviews} />
+            <Reviews feedbacks={feedbacks} setFeedbacks={setFeedbacks} />
           </Element>
           <Element name="give_review" className="w-full">
-            <ReviewInputs product={mousse} />
+            <ReviewInputs product={mousse} feedbacks={feedbacks} setFeedbacks={setFeedbacks} />
           </Element>
         </div>
       </section>
@@ -337,7 +348,6 @@ export async function getServerSideProps(context) {
     // Passing data to the page via props
     return { props: { mousse: data.mousse, variants: data.variants, reviews } };
   } catch (error) {
-    console.log(error);
     return { props: { error: 404 } };
   }
 }

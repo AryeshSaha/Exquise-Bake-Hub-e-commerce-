@@ -97,7 +97,6 @@ const useCart = () => {
         subTotalAmtPayable(newCart);
         setCart(newCart);
       } catch (error) {
-        console.log(error);
       }
     }
   };
@@ -117,7 +116,6 @@ const useCart = () => {
       newCart[itemCode].qty -= qty;
     }
     if (newCart[itemCode].qty < 1) delete newCart[itemCode];
-    // console.log("Reduced from cart: ", newCart); // TODO: Add functionality for reducing item to Cart here
     localStorage.setItem("cart", JSON.stringify(newCart));
     subTotalAmtPayable(newCart);
     setCart(newCart);

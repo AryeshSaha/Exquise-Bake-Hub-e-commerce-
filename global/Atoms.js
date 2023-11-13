@@ -15,5 +15,6 @@ const subTotalAtom = atom(0.0)
 const dropdownAtom = atom(false);
 
 const reviewsAtom = atom([]);
+const avgRatingAtom = atom(0.0);
 
-export { BaseUrl, loadingAtom, userAtom, userDetailsAtom, cartSidebarAtom, cartAtom, subTotalAtom, dropdownAtom, reviewsAtom };
+export { BaseUrl, loadingAtom, userAtom, userDetailsAtom, cartSidebarAtom, cartAtom, subTotalAtom, dropdownAtom, reviewsAtom, avgRatingAtom };

@@ -4,7 +4,6 @@ import User from "@/models/User";
 import { serialize } from "cookie";
 
 const handler = async (req, res) => {
-  console.log("login api running")
   if (req.method != "POST") res.status(400).json({ msg: "bad request" });
   if (req.body.email == "" || req.body.password == "")
     res.status(500).json({

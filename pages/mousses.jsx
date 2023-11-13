@@ -74,7 +74,6 @@ export async function getServerSideProps(context) {
     // Passing data to the page via props
     return { props: { mousses: data.mousses } };
   } catch (error) {
-    console.log(error);
     return { props: { mousses: [] } };
   }
 }

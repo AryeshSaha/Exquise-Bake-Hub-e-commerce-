@@ -3,19 +3,12 @@ import { BsFillTrashFill, BsStarFill } from "react-icons/bs";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useAtom } from "jotai";
 import { BaseUrl, reviewsAtom } from "@/global/Atoms";
-import { useEffect } from "react";
 import useAuth from "@/hooks/useAuth";
 
 /* eslint-disable @next/next/no-img-element */
-const Reviews = ({ reviews }) => {
+const Reviews = ({ feedbacks, setFeedbacks }) => {
   const { userDetails, setUser } = useAuth();
-  const [feedbacks, setFeedbacks] = useAtom(reviewsAtom);
-
-  useEffect(() => {
-    setFeedbacks(reviews);
-  }, [reviews, setFeedbacks]);
   const handleDelete = async (id) => {
     const config = {
       headers: {
@@ -43,7 +36,6 @@ const Reviews = ({ reviews }) => {
       const updatedReviewsArr = feedbacks.filter((review) => review._id !== id);
       setFeedbacks(updatedReviewsArr);
     } catch (error) {
-      console.log(error);
       if (error.response.status == 401) {
         setUser(false);
         toast.error("Please login again.", {

@@ -4,6 +4,8 @@ import { useRouter } from "next/router";
 import React, { useState } from "react";
 import Link from "next/link";
 import { BaseUrl } from "@/global/Atoms";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ChangePassword = ({ email }) => {
   const router = useRouter();
@@ -16,7 +18,17 @@ const ChangePassword = ({ email }) => {
   };
 
   const changePass = async () => {
-    if (password !== cPassword) return console.log("Passwords don't match");
+    if (password !== cPassword)
+      return toast.error("Passwords don't match", {
+        position: "bottom-left",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
     else {
       const config = {
         headers: {
@@ -34,13 +46,13 @@ const ChangePassword = ({ email }) => {
         );
         if (data.message) router.push(`${BaseUrl}/login`);
       } catch (error) {
-        console.log(error);
-        router.push(`${BaseUrl}/forgotpass`)
+        router.push(`${BaseUrl}/forgotpass`);
       }
     }
   };
   return (
     <section className="bg-gray-50">
+      <ToastContainer newestOnTop rtl={false} pauseOnFocusLoss={false} />
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
         <Link
           href="#"
@@ -124,7 +136,9 @@ export const getServerSideProps = async (context) => {
     },
   };
   try {
-    const { data: { email } } = await axios.get(`${BaseUrl}/api/getEmailFromToken`, config);
+    const {
+      data: { email },
+    } = await axios.get(`${BaseUrl}/api/getEmailFromToken`, config);
 
     return {
       props: {

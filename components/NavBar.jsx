@@ -32,7 +32,6 @@ const NavBar = () => {
       } = await axios.get(`${BaseUrl}/api/logout`, {
         withCredentials: true,
       });
-      console.log("Message: ", msg);
       setUser(false);
       router.push("/login");
     } catch (error) {
@@ -46,7 +45,6 @@ const NavBar = () => {
         progress: undefined,
         theme: "colored",
       });
-      console.log(error.response.data.msg);
     }
   };
 
@@ -80,25 +78,25 @@ const NavBar = () => {
         >
           <Link
             href={"/"}
-            className="text-white border-b border-indigo-500 font-semibold md:text-gray-800 md:border-0 md:hover:text-indigo-500  md:hover:border-b-2 md:hover:border-indigo-500 transition-transform"
+            className="text-white border-b border-indigo-500 font-semibold lg:text-gray-800 lg:border-0 lg:hover:text-indigo-500  lg:hover:border-b-2 lg:hover:border-indigo-500 transition-transform"
           >
             Home
           </Link>
           <Link
             href={"/cakes"}
-            className="text-white border-b border-indigo-500 font-semibold md:text-gray-800 md:border-0 md:hover:text-indigo-500  md:hover:border-b-2 md:hover:border-indigo-500 transition-transform"
+            className="text-white border-b border-indigo-500 font-semibold lg:text-gray-800 lg:border-0 lg:hover:text-indigo-500  lg:hover:border-b-2 lg:hover:border-indigo-500 transition-transform"
           >
             Cakes
           </Link>
           <Link
             href={"/mousses"}
-            className="text-white border-b border-indigo-500 font-semibold md:text-gray-800 md:border-0 md:hover:text-indigo-500  md:hover:border-b-2 md:hover:border-indigo-500 transition-transform"
+            className="text-white border-b border-indigo-500 font-semibold lg:text-gray-800 lg:border-0 lg:hover:text-indigo-500  lg:hover:border-b-2 lg:hover:border-indigo-500 transition-transform"
           >
             Mousses
           </Link>
           <Link
             href={"/create"}
-            className="text-white border-b border-indigo-500 font-semibold md:text-gray-800 md:border-0 md:hover:text-indigo-500  md:hover:border-b-2 md:hover:border-indigo-500 transition-transform"
+            className="text-white border-b border-indigo-500 font-semibold lg:text-gray-800 lg:border-0 lg:hover:text-indigo-500  lg:hover:border-b-2 lg:hover:border-indigo-500 transition-transform"
           >
             Create a Cake
           </Link>

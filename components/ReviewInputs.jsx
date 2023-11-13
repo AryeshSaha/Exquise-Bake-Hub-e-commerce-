@@ -3,16 +3,13 @@ import StarRating from "./StarRating";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useAtom } from "jotai";
-import { BaseUrl, reviewsAtom } from "@/global/Atoms";
+import { BaseUrl } from "@/global/Atoms";
 import useAuth from "@/hooks/useAuth";
-// import { useAuth } from "@/context/useAuth";
 
-const ReviewInputs = ({ product }) => {
+const ReviewInputs = ({ product, feedbacks, setFeedbacks }) => {
   const { user, setUser } = useAuth();
   const [rating, setRating] = useState(0);
   const [textReview, setTextReview] = useState("");
-  const [feedbacks, setFeedbacks] = useAtom(reviewsAtom);
 
   const handleRatingChange = (newRating) => {
     setRating(newRating);
@@ -52,7 +49,6 @@ const ReviewInputs = ({ product }) => {
         { rating, review: textReview, title: product.title },
         config
       );
-      console.log(data);
       setTextReview("");
       setRating(0);
       setFeedbacks([...feedbacks, data.feedback]);
@@ -67,7 +63,6 @@ const ReviewInputs = ({ product }) => {
         theme: "colored",
       });
     } catch (error) {
-      console.log(error);
       if (error.response.status === 401) {
         setUser(false);
         toast.error("Session expired. Please login again.", {

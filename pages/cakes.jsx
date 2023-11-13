@@ -75,7 +75,6 @@ export async function getServerSideProps(context) {
     // Passing data to the page via props
     return { props: { cakes: data.cakes } };
   } catch (error) {
-    console.log(error);
     return { props: { cakes: [] } };
   }
 }

@@ -30,7 +30,6 @@ const Forgotpass = () => {
         },
         config
       );
-      console.log(data.message);
       if (data.message) setSendOtp(true);
     } catch (error) {
       console.log(error);
@@ -57,7 +56,6 @@ const Forgotpass = () => {
           `${BaseUrl}/changePass?token=${data.expectedToken}`
         );
     } catch (error) {
-      console.log(error);
       setSendOtp(false);
     }
   };

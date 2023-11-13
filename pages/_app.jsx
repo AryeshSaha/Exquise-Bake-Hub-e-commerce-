@@ -41,7 +41,6 @@ export default function App({ Component, pageProps }) {
         router.pathname === "/checkout" &&
         Object.keys(JSON.parse(localCart)).length <= 0
       ) {
-        console.log("Cart is empty");
         toast.error("Can't checkout at the moment", {
           position: "bottom-left",
           autoClose: 3000,

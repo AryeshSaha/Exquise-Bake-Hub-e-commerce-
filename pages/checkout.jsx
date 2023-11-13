@@ -173,7 +173,6 @@ const Checkout = () => {
       const rzpPopup = new window.Razorpay(options);
       rzpPopup.open();
     } catch (error) {
-      console.log("error from checkout: ", error)
       if (error.response.status == 401) {
         setUser(false);
         toast.error("Please login again.", {

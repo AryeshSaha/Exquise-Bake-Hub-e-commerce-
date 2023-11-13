@@ -74,12 +74,9 @@ const Account = () => {
         },
         config
       );
-
-      console.log("updated: ", data);
       setUserDetails(data.updatedUser);
       setLoading(false);
     } catch (error) {
-      console.log(error);
       if (error.response.status == 401) {
         setUser(false);
         toast.error("Please login again.", {
@@ -141,8 +138,6 @@ const Account = () => {
           },
           config
         );
-
-        console.log("updated: ", data);
         toast.success(data.message, {
           position: "bottom-center",
           autoClose: 5000,
@@ -155,7 +150,6 @@ const Account = () => {
         });
         setLoading(false);
       } catch (error) {
-        console.log(error);
         if (error.response.status == 401) {
           setUser(false);
           toast.error("Please login again.", {
